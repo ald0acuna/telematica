@@ -47,6 +47,10 @@ httpserver.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/registro.html'));
 });
 
+httpserver.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/casos.html'));
+});
+
 
 io.on('connection', function(socket) {
 
@@ -65,6 +69,22 @@ io.on('connection', function(socket) {
         let query = database.query(sql,userdata,(err,result) =>{
             if(err) throw err;
         }); 
+
+    });
+
+    socket.on('validar', msg=>{
+        username = msg[0];
+        password = msg[1];
+
+        var vd = `SELECT User, Password FROM Usuarios WHERE User =  '${username}' AND Password =  '${password}'`;
+        console.log(vd);
+        database.query(vd, function (err, result) {
+            
+            if (err) throw err;
+            /* console.log(result); */
+            //socket.emit('loginResp', result);
+            console.log("res: "+result); 
+        });
     });
 
 });

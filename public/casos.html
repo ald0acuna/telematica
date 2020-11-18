@@ -1,7 +1,12 @@
 <!DOCTYPE HTML>
 <html>
   <head>
+    <meta charset="UTF-8">
+
     <title>Registro</title>
+    <script src='/socket.io/socket.io.js'></script> 
+    <script> var socket = io.connect('http://54.196.238.128:4500/');</script>
+
   </head>
   <body>
     <h1>Registro de casos</h1>
@@ -9,8 +14,8 @@
     <h2></h2>
     <p></p>
     <h3>A continuacion el ayudante puede registrar los casos de COVID 19</h3>
-
-    <form id="form" class="datos" method="POST" action="index.html">
+    <!--
+    <form id="form" class="datos" method="POST" action="gestion.html">
         Datos de usuario <input type="text" id="nombre"  placeholder="Nombre" size="7">
         <input type="text" id="apellido"  placeholder="Apellido" size="7">
         <input type="text" id="cc"  placeholder="#Cedula" size="7">
@@ -24,6 +29,6 @@
         <p>
         <input type="submit" value="Iniciar Sesion">
     </form>
-
+    -->
   </body>
 </html>

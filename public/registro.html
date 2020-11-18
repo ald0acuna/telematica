@@ -16,7 +16,7 @@
     <p></p>
     <h3>Para registrarse debe llenar todos los campos probando....</h3>
 
-    <form id="form" class="datos" >
+    <form id="form" class="datos" action="login.html" >
       
       Datos de usuario <input type="text" id="nombre"  placeholder="Nombre" size="7">
       <input type="text" id="apellido"  placeholder="Apellido" size="7">
@@ -30,8 +30,8 @@
       <input type="password" id="password"  placeholder="contraseña" size="7">
       
 
-      <button type="submit" class="guardarRegistros" >Guardar Registros</button>
-
+      
+      <input type="submit" value="Guardar Registros">
     </form>
     
     <script>
@@ -39,7 +39,7 @@
       
       form.addEventListener('submit', (e) => {
 
-        e.preventDefault();
+        
 
         nombre = e.target.nombre.value;
         apellido = e.target.apellido.value;
@@ -49,11 +49,12 @@
         password = e.target.password.value;
         console.log("nm: "+nombre+" ap: "+apellido+" Rol: "+idRol+" user: "+username+" pass: "+password);
 
-        if(nombre == '' || typeof apellido === '' || typeof cc === '' 
-        || typeof idRol === 0 || typeof username === '' || typeof password === '' ){
-
+        if(nombre == '' || apellido == '' || cc == '' 
+        || idRol == 0 || username == '' || password == '' ){
+          e.preventDefault();
           alert("Debe llenar todos los campos")
         }else{
+
           var datosUsuario = [];
           datosUsuario.push(nombre);
           datosUsuario.push(apellido);
@@ -67,6 +68,7 @@
          
         }
 
+        e.stopImmediatePropagation();
       });
     </script> 
 
