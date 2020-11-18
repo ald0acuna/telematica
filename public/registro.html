@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+
+    <title>Registro</title>
+    <script src='/socket.io/socket.io.js'></script> 
+    <script> var socket = io.connect('http://54.196.238.128:4500/');</script>
+    
+  </head>
+
+  <body>
+    <h1>Registro de usuarios</h1>
+    
+    <h2></h2>
+    <p></p>
+    <h3>Para registrarse debe llenar todos los campos probando....</h3>
+
+    <form id="form" class="datos" >
+      
+      Datos de usuario <input type="text" id="nombre"  placeholder="Nombre" size="7">
+      <input type="text" id="apellido"  placeholder="Apellido" size="7">
+      <input type="text" id="cc"  placeholder="#Cedula" size="7">
+      <select name="ROLES" id="Roles">
+        <option value="0">Escoja un Rol</option>
+        <option value="1">Médico</option> 
+        <option value="2">Ayudante</option>  
+      </select>
+      <input type="text" id="username"  placeholder="Usuario"size="7">
+      <input type="password" id="password"  placeholder="contraseña" size="7">
+      
+
+      <button type="submit" class="guardarRegistros" >Guardar Registros</button>
+
+    </form>
+    
+    <script>
+      const form = document.getElementById('form')
+      
+      form.addEventListener('submit', (e) => {
+
+        e.preventDefault();
+
+        nombre = e.target.nombre.value;
+        apellido = e.target.apellido.value;
+        cc = e.target.cc.value;
+        idRol = e.target.Roles.value;
+        username = e.target.username.value;
+        password = e.target.password.value;
+        console.log("nm: "+nombre+" ap: "+apellido+" Rol: "+idRol+" user: "+username+" pass: "+password);
+
+        if(nombre == '' || typeof apellido === '' || typeof cc === '' 
+        || typeof idRol === 0 || typeof username === '' || typeof password === '' ){
+
+          alert("Debe llenar todos los campos")
+        }else{
+          var datosUsuario = [];
+          datosUsuario.push(nombre);
+          datosUsuario.push(apellido);
+          datosUsuario.push(cc);
+          datosUsuario.push(idRol);
+          datosUsuario.push(username);
+          datosUsuario.push(password);
+
+
+          socket.emit("datosUsuario",datosUsuario);
+         
+        }
+
+      });
+    </script> 
+
+    
+  </body>
+</html>

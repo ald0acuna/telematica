@@ -1,0 +1,23 @@
+{
+  "name": "telematica",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ald0acuna/telematica.git"
+  },
+  "author": "aldair",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ald0acuna/telematica/issues"
+  },
+  "homepage": "https://github.com/ald0acuna/telematica#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  }
+}
