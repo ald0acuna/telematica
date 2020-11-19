@@ -51,6 +51,12 @@ httpserver.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/casos.html'));
 });
 
+httpserver.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/img/background.jpg'));
+});
+httpserver.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/img/logoUninorte.png'));
+});
 
 io.on('connection', function(socket) {
 
@@ -82,7 +88,7 @@ io.on('connection', function(socket) {
             
             if (err) throw err;
             /* console.log(result); */
-            //socket.emit('loginResp', result);
+            socket.emit('loginResp', result);
             console.log("res: "+result); 
         });
     });

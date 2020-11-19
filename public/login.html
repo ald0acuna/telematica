@@ -6,35 +6,37 @@
 
 
     <link rel="stylesheet" href="css/loginstyle.css">
-    <title>Proyecto Covid</title>
+    <title>Login | Proyecto Covid</title>
 
     <script src='/socket.io/socket.io.js'></script> 
     <script> var socket = io.connect('http://54.196.238.128:4500/');</script>
   </head>
   <body>
-    <h1>Pagina Principal</h1>
-    <h2></h2>
-    <p>En esta pagina puedes ingresar los datos del usuario</p>
-    <h3>Digite sus datos de usuario</h3>
-    <section class="login" >
+    
+  
+    
+    <div class="login-box" >
+      <img src="img/logoUninorte.png" class="avatar" alt="Logo de uninorte">
       <h2>LOGIN</h2>
-      <form id="validacion" class="datos"  >
-        <input type="text" id="username"  placeholder="nombre de usuario">
-        <input type="password" id="password"  placeholder="password">
-        <p>
+      <form id="validacion" action="casos.html" >
+        <label for="username">Usuario</label>
+        <input type="text" id="username"  placeholder="introduzca usuario">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password"  placeholder="introduzca contraseña">
+        
         <input type="submit" value="Iniciar Sesion">
       </form>
 
-      <p>Si no se encuentra registrado puede hacerlo dando click <a href=registro.html>aqui</a> </p>
-    </section>
+      <a href=registro.html>¿No estás registrado?</a>
+    </div>
     
     <script>
-
+      
       const form = document.getElementById('validacion')
       
       form.addEventListener('submit', (e) => {
 
-        //var SW=0;
+        var sw=0;
 
         nombre = e.target.username.value;
         password = e.target.password.value;
@@ -48,19 +50,31 @@
 
         socket.on('loginResp',info=>{
           console.log("info: "+info);
+          console.log("Primer punto sw: "+sw);
+          e.preventDefault();
           if (info.length ==0){
-            e.preventDefault();
+            //e.preventDefault();
+            //e.stopImmediatePropagation();
+            sw=1;
             alert("Su usuario o contraseña son incorrectos");
-            e.stopImmediatePropagation();
+            //e.preventDefault();
+            //e.stopImmediatePropagation();
             
           }else{
 
           }
-
+          
         });
+        console.log("Segundo punto sw: "+sw);
+        /*
+        if(sw==1){
+          sw=0;
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }*/
         
         
-        form.removeEventListener();
+        
       });
     </script>
     
