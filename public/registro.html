@@ -31,7 +31,6 @@
         <input type="text" id="cc" placeholder="#cedula" />
         <input type="button" id="next" class="next action-button" value="Next" />
       </fieldset>
-      
       <fieldset >
         <h2 class="fs-title">Registro de usuario</h2>
         <h3 class="fs-subtitle">paso final</h3>
@@ -136,7 +135,6 @@
       const form = document.getElementById('msform')
       
       form.addEventListener('submit', (e) => {
-        console.log("Si está escuchando")
         nombre = e.target.nombre.value;
         apellido = e.target.apellido.value;
         cc = e.target.cc.value;
@@ -161,7 +159,6 @@
 
 
           socket.emit("datosUsuario",datosUsuario);
-          //location.href("login.html");
         }
 
         e.stopImmediatePropagation();

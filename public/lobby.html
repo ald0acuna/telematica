@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src='/socket.io/socket.io.js'></script> 
+    <script> var socket = io.connect('http://54.196.238.128:4500/');</script>
+</head>
+<body>
+    <script>
+        i=1
+        socket.on('loginResp',function (output){
+            for(i of output){
+                rol = i.output;
+                console.log("rol: "+rol);
+            }
+            if(rol==1){
+
+
+            </script>
+            //Html here
+            <div>
+                <form action="">
+                    <input type="submit" value="Busqueda">
+                </form>
+                <form action="">
+                    <input type="submit" value="Mapa general">
+                </form>
+            </div>
+
+            <script>
+                }else{
+            </script>
+            //Html here
+            <div>
+                <form action="">
+                    <input type="submit" value="Ingresar Caso">
+                </form>
+                <form action="">
+                    <input type="submit" value="Actualizar Caso">
+                </form>
+            </div>
+            <script>
+            }
+        });
+    </script>
+    
+</body>
+</html>

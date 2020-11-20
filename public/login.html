@@ -3,8 +3,6 @@
   <head>
 
     <meta charset="UTF-8">
-
-
     <link rel="stylesheet" href="css/loginstyle.css">
     <title>Login | Proyecto Covid</title>
 
@@ -12,8 +10,6 @@
     <script> var socket = io.connect('http://54.196.238.128:4500/');</script>
   </head>
   <body>
-    
-  
     
     <div class="login-box" >
       <img src="img/logoUninorte.png" class="avatar" alt="Logo de uninorte">
@@ -53,18 +49,14 @@
           console.log("Primer punto sw: "+sw);
           e.preventDefault();
           if (info.length ==0){
-            sw=1;
             alert("Su usuario o contraseña son incorrectos");
             location.href="login.html";
             
           }else{
-            location.href="casos.html";
+            location.href="lobby.html";
           }
           
         });
-       
-        
-        
       });
     </script>
     

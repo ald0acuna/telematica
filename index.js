@@ -52,6 +52,8 @@ httpserver.get('/', (req, res) => {
 
 io.on('connection', function(socket) {
 
+    
+
     socket.on('datosUsuario', msg => {
         nombre = msg[0];
         apellido = msg[1];
@@ -70,11 +72,31 @@ io.on('connection', function(socket) {
 
     });
 
+    socket.on('datosPaciente', msg=>{
+        nombre = msg[0];
+        apellido = msg[1];
+        cc = msg[2];
+        sexo = msg[3];
+        fNaci = msg[4];
+        resid = msg[5];
+        trabajo = msg[6];
+        rExamen = msg[7];
+        fExamen = msg[8];
+
+        pacientdata = {Nombre:nombre, Apellido:apellido, Cédula:cc, Sexo:sexo, FechadeNacimiento:fNaci, 
+            DirecciónResidencia: resid, DirecciónTrabajo:trabajo, ResultadoExamen: rExamen, FechaExamen:fExamen}
+        let sql = 'INSERT INTO Casos SET ?';
+        let query = database.query(sql,pacientdata,(err,result) =>{
+            if(err) throw err;
+        });
+
+    });
+
     socket.on('validar', msg=>{
         username = msg[0];
         password = msg[1];
 
-        var vd = `SELECT User, Password FROM Usuarios WHERE User =  '${username}' AND Password =  '${password}'`;
+        var vd = `SELECT ROL FROM Usuarios WHERE User =  '${username}' AND Password =  '${password}'`;
         console.log(vd);
         database.query(vd, function (err, result) {
             
