@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/loginstyle.css">
     <title>Login | Proyecto Covid</title>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src='/socket.io/socket.io.js'></script> 
     <script> var socket = io.connect('http://54.196.238.128:4500/');</script>
   </head>
@@ -61,4 +61,39 @@
     </script>
     
   </body>
+  <script>
+    var ctx= document.getElementById("myChart").getContext("2d");
+    var myChart= new Chart(ctx,{
+      type:'line',
+      data: {
+        labels:[1,20,50,60,70,80],
+        datasets:[
+          {
+            label:'Registrados',
+            //fill: false,
+            data:[9,15,19,24,30,35],
+            backgroundColor: "rgb(66, 134, 244, 0.05)",
+            borderColor: "rgb(55, 112, 100)"
+          },
+          {
+            label:'Muertes',
+            //fill: false,
+            data:[13,20,27,10],
+            backgroundColor: "rgb(66, 134, 244, 0.05)",
+            borderColor: "rgb(66, 134, 244)"
+          }
+        ]
+        
+      },
+      options:{
+        scales:{
+          yAxes:[{
+            ticks:{
+              beginAtZero:true
+            }
+          }]
+        }
+      }
+    });
+  </script>
 </html>
