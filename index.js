@@ -1,28 +1,14 @@
 var express = require('express');
 const { fstat } = require('fs');
-//var socketio = require('socket.io');
-
-
 const mysql = require('mysql');
 var httpserver = express();
-
-//var server = require('http').Server(httpserver);       
-//var io = socketio.listen(server);
-
-//const socket = dgram.createSocket('udp4');
-
 var server = require('http').Server(httpserver);
-//const server = require('http').createServer();
 const io = require('socket.io')(server);
-//var io = socketio.listen(server);
-
 const path = require('path');
-//var socket = io.connect('http://54.198.215.111:4500/', { 'forceNew': true });
+
 
 //Settings
 httpserver.set('port', process.env.PORT || 4500);
-
-
 httpserver.use(express.static('public'));
 
 
@@ -33,9 +19,6 @@ const database = mysql.createConnection({
     password: '2147qwer',
     database: 'Covid19'
 });
-
-
-
 
 
 httpserver.get('/', (req, res) => {
@@ -56,6 +39,15 @@ httpserver.get('/', (req, res) => {
 });
 httpserver.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/img/logoUninorte.png'));
+});
+httpserver.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/js/jquery.js'));
+});
+httpserver.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/js/jquery-3.5.1.min.js'));
+});
+httpserver.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/js/registro.js'));
 });
 
 io.on('connection', function(socket) {

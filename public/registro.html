@@ -2,7 +2,12 @@
 <html>
   <head>
     <meta charset="UTF-8">
-
+    <link rel="stylesheet" href="css/registrostyle.css">
+    
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script>
+    
     <title>Registro</title>
     <script src='/socket.io/socket.io.js'></script> 
     <script> var socket = io.connect('http://54.196.238.128:4500/');</script>
@@ -10,37 +15,128 @@
   </head>
 
   <body>
-    <h1>Registro de usuarios</h1>
     
-    <h2></h2>
-    <p></p>
-    <h3>Para registrarse debe llenar todos los campos probando....</h3>
-
-    <form id="form" class="datos" action="login.html" >
+    <form id="msform" action="login.html">
+      <!-- progressbar -->
+      <ul id="progressbar">
+        <li class="active">Detalles Personales</li>
+        <li>Detalles de Usuario</li>
+      </ul>
+      <!-- fieldsets -->
+      <fieldset>
+        <h2 class="fs-title">Registro de usuario</h2>
+        <h3 class="fs-subtitle">paso 1</h3>
+        <input type="text" id="nombre" placeholder="nombre" />
+        <input type="text" id="apellido" placeholder="apellido" />
+        <input type="text" id="cc" placeholder="#cedula" />
+        <input type="button" id="next" class="next action-button" value="Next" />
+      </fieldset>
       
-      Datos de usuario <input type="text" id="nombre"  placeholder="Nombre" size="7">
-      <input type="text" id="apellido"  placeholder="Apellido" size="7">
-      <input type="text" id="cc"  placeholder="#Cedula" size="7">
-      <select name="ROLES" id="Roles">
-        <option value="0">Escoja un Rol</option>
-        <option value="1">Médico</option> 
-        <option value="2">Ayudante</option>  
-      </select>
-      <input type="text" id="username"  placeholder="Usuario"size="7">
-      <input type="password" id="password"  placeholder="contraseña" size="7">
-      
-
-      
-      <input type="submit" value="Guardar Registros">
+      <fieldset >
+        <h2 class="fs-title">Registro de usuario</h2>
+        <h3 class="fs-subtitle">paso final</h3>
+        <select id="Roles">
+          <option value="0">Escoja un Rol</option>
+          <option value="1">Médico</option> 
+          <option value="2">Ayudante</option> 
+        </select>
+        <input type="text" id="username" placeholder="Usuario" />
+        <input type="password" id="password" placeholder="Contraseña" />
+        <!--<textarea name="address" placeholder="Address"></textarea>-->
+        <input type="button"  class="previous action-button" value="Previous" />
+        <input type="submit"  class="submit action-button" value="Submit" />
+        
+      </fieldset>
     </form>
-    
+  
     <script>
-      const form = document.getElementById('form')
+
+      var current_fs, next_fs, previous_fs; //fieldsets
+      var left, opacity, scale; //fieldset properties which we will animate
+      var animating; //flag to prevent quick multi-click glitches
+
+
+      $('#next').click(function(){
+	      if(animating) return false;
+	      animating = true;
+	
+	      current_fs = $(this).parent();
+	      next_fs = $(this).parent().next();
+	
+	      //activate next step on progressbar using the index of next_fs
+	      $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+	
+	      //show the next fieldset
+	      next_fs.show(); 
+	      //hide the current fieldset with style
+	      current_fs.animate({opacity: 0}, {
+		      step: function(now, mx) {
+			      //as the opacity of current_fs reduces to 0 - stored in "now"
+			      //1. scale current_fs down to 80%
+			      scale = 1 - (1 - now) * 0.2;
+			      //2. bring next_fs from the right(50%)
+			      left = (now * 50)+"%";
+			      //3. increase opacity of next_fs to 1 as it moves in
+			      opacity = 1 - now;
+			      current_fs.css({
+              'transform': 'scale('+scale+')',
+              'position': 'absolute'
+            });
+			      next_fs.css({'left': left, 'opacity': opacity});
+		      }, 
+		      duration: 800, 
+		      complete: function(){
+			      current_fs.hide();
+			      animating = false;
+		      }, 
+		      //this comes from the custom easing plugin
+		      easing: 'easeInOutBack'
+	      });
+      });
+
+      $(".previous").click(function(){
+	      if(animating) return false;
+	      animating = true;
+	
+	      current_fs = $(this).parent();
+	      previous_fs = $(this).parent().prev();
+	
+	      //de-activate current step on progressbar
+	      $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+	
+	      //show the previous fieldset
+	      previous_fs.show(); 
+	      //hide the current fieldset with style
+	      current_fs.animate({opacity: 0}, {
+		      step: function(now, mx) {
+			      //as the opacity of current_fs reduces to 0 - stored in "now"
+			      //1. scale previous_fs from 80% to 100%
+			      scale = 0.8 + (1 - now) * 0.2;
+			      //2. take current_fs to the right(50%) - from 0%
+			      left = ((1-now) * 50)+"%";
+			      //3. increase opacity of previous_fs to 1 as it moves in
+			      opacity = 1 - now;
+			      current_fs.css({'left': left});
+			      previous_fs.css({'transform': 'scale('+scale+')', 'opacity': opacity});
+		      }, 
+		      duration: 800, 
+		      complete: function(){
+			      current_fs.hide();
+			      animating = false;
+		      }, 
+		      //this comes from the custom easing plugin
+		      easing: 'easeInOutBack'
+	      });
+      });
+
+      
+    </script>
+
+    <script>
+      const form = document.getElementById('msform')
       
       form.addEventListener('submit', (e) => {
-
-        
-
+        console.log("Si está escuchando")
         nombre = e.target.nombre.value;
         apellido = e.target.apellido.value;
         cc = e.target.cc.value;
@@ -48,10 +144,10 @@
         username = e.target.username.value;
         password = e.target.password.value;
         console.log("nm: "+nombre+" ap: "+apellido+" Rol: "+idRol+" user: "+username+" pass: "+password);
-
+        
         if(nombre == '' || apellido == '' || cc == '' 
         || idRol == 0 || username == '' || password == '' ){
-          e.preventDefault();
+          e.preventDefault();  
           alert("Debe llenar todos los campos")
         }else{
 
@@ -65,12 +161,14 @@
 
 
           socket.emit("datosUsuario",datosUsuario);
-         
+          //location.href("login.html");
         }
 
         e.stopImmediatePropagation();
       });
     </script> 
+
+
 
     
   </body>

@@ -18,7 +18,7 @@
     <div class="login-box" >
       <img src="img/logoUninorte.png" class="avatar" alt="Logo de uninorte">
       <h2>LOGIN</h2>
-      <form id="validacion" action="casos.html" >
+      <form id="validacion"  >
         <label for="username">Usuario</label>
         <input type="text" id="username"  placeholder="introduzca usuario">
         <label for="password">Contraseña</label>
@@ -53,26 +53,16 @@
           console.log("Primer punto sw: "+sw);
           e.preventDefault();
           if (info.length ==0){
-            //e.preventDefault();
-            //e.stopImmediatePropagation();
             sw=1;
             alert("Su usuario o contraseña son incorrectos");
-            //e.preventDefault();
-            //e.stopImmediatePropagation();
+            location.href="login.html";
             
           }else{
-
+            location.href="casos.html";
           }
           
         });
-        console.log("Segundo punto sw: "+sw);
-        /*
-        if(sw==1){
-          sw=0;
-          e.preventDefault();
-          e.stopImmediatePropagation();
-        }*/
-        
+       
         
         
       });
