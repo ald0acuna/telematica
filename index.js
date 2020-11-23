@@ -103,7 +103,8 @@ io.on('connection', function(socket) {
             if (err) throw err;
             /* console.log(result); */
             socket.emit('loginResp', result);
-            console.log("res: "+result); 
+            console.log("res: "+result);
+            
         });
     });
 
