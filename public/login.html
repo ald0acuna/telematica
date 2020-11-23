@@ -4,13 +4,14 @@
 
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/loginstyle.css">
-    <title>Login | Proyecto Covid</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <title>Login | Proyecto Covid</title>
+
     <script src='/socket.io/socket.io.js'></script> 
     <script> var socket = io.connect('http://54.196.238.128:4500/');</script>
   </head>
   <body>
-    
+
     <div class="canvas-box">
       <canvas id="myChart"></canvas>
     </div>
@@ -35,7 +36,7 @@
       const form = document.getElementById('validacion')
       
       form.addEventListener('submit', (e) => {
-
+        e.preventDefault();
         var sw=0;
 
         nombre = e.target.username.value;
@@ -47,57 +48,66 @@
         valid.push(password);
 
         socket.emit("validar",valid);
-
+        i=1;
         socket.on('loginResp',info=>{
           console.log("info: "+info);
-          console.log("Primer punto sw: "+sw);
-          e.preventDefault();
+          
+          for (i of info){
+            var rol = i.ROL
+          }
+          console.log(rol);
           if (info.length ==0){
             alert("Su usuario o contraseña son incorrectos");
             location.href="login.html";
             
           }else{
-            location.href="lobby.html";
+            if(rol== 2){ 
+              location.href="lobbyayudante.html"
+            }else{
+              location.href="lobbymedico.html"
+            }
+            
+            //location.href="lobby.html";
           }
           
         });
       });
     </script>
+    <script>
+      var ctx= document.getElementById("myChart").getContext("2d");
+      var myChart= new Chart(ctx,{
+        type:'line',
+        data: {
+          labels:[1,20,50,60,70,80],
+          datasets:[
+            {
+              label:'Registrados',
+              //fill: false,
+              data:[9,15,19,24,30,35],
+              backgroundColor: "rgb(66, 134, 244, 0.05)",
+              borderColor: "rgb(55, 112, 100)"
+            },
+            {
+              label:'Muertes',
+              //fill: false,
+              data:[13,20,27,10],
+              backgroundColor: "rgb(66, 134, 244, 0.05)",
+              borderColor: "rgb(66, 134, 244)"
+            }
+          ]
+          
+        },
+        options:{
+          scales:{
+            yAxes:[{
+              ticks:{
+                beginAtZero:true
+              }
+            }]
+          }
+        }
+      });
+    </script>
     
   </body>
-  <script>
-    var ctx= document.getElementById("myChart").getContext("2d");
-    var myChart= new Chart(ctx,{
-      type:'line',
-      data: {
-        labels:[1,20,50,60,70,80],
-        datasets:[
-          {
-            label:'Registrados',
-            //fill: false,
-            data:[9,15,19,24,30,35],
-            backgroundColor: "rgb(66, 134, 244, 0.05)",
-            borderColor: "rgb(55, 112, 100)"
-          },
-          {
-            label:'Muertes',
-            //fill: false,
-            data:[13,20,27,10],
-            backgroundColor: "rgb(66, 134, 244, 0.05)",
-            borderColor: "rgb(66, 134, 244)"
-          }
-        ]
-        
-      },
-      options:{
-        scales:{
-          yAxes:[{
-            ticks:{
-              beginAtZero:true
-            }
-          }]
-        }
-      }
-    });
-  </script>
 </html>

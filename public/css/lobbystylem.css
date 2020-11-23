@@ -1,0 +1,68 @@
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+/*basic reset*/
+* {margin: 0; padding: 0;}
+body {
+    height: 100%;
+    background: url(../img/medicoback.jpeg) no-repeat center top;
+    background-size: cover;    
+    font-size: 13px;
+    font-family: montserrat, arial, verdana;
+    text-align: center;
+}
+
+body h2{
+    margin: 0;
+    padding: 0 0 20px;
+    margin-top: 50px;
+    text-align: center;
+    font-size: 22px;
+    font-family: montserrat;
+    display: block;
+    color: white;
+}
+
+.button-box{
+    margin-top: 50px;
+    top: 25%;
+    color: transparent;
+}
+.button-box .button1 {
+    margin: 0;
+    padding: 0;
+    width: 300px;
+    height: 40px;
+    background: linear-gradient(red, rgb(138, 4, 4));
+    outline-color: red;
+	font-weight: bold;
+	color: white;
+	border: 0 none;
+	border-radius: 20px;
+	cursor: pointer;
+	margin-bottom: 30px;
+    font-size: 16px;
+    font-family: montserrat;
+    
+}
+.button-box .button1:hover, .button1:focus {
+	box-shadow: 1px 1px 1px 1px white, 1.5px 1.5px 1.5px 1.5px red;
+}
+
+.button-box .button2 {
+    width: 300px;
+    height: 40px;
+    background: linear-gradient(red, rgb(138, 4, 4));
+    outline-color: red;
+	font-weight: bold;
+	color: white;
+	border: 0 none;
+	border-radius: 20px;
+	cursor: pointer;
+	padding: 10px 5px;
+    margin: 10px 5px;
+    font-size: 16px;
+    font-family: montserrat;
+}
+.button-box .button2:hover, .button2:focus {
+	box-shadow: 1px 1px 1px 1px white, 1.5px 1.5px 1.5px 1.5px red;
+}
