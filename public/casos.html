@@ -67,8 +67,10 @@
 
     <script>
       const form = document.getElementById('msform')
-      
+      tableArray = [];
+      cont = 0;
       form.addEventListener('submit', (e) => {
+        e.preventDefault();
         nombre = e.target.nombre.value;
         apellido = e.target.apellido.value;
         cc = e.target.cc.value;
@@ -82,8 +84,9 @@
         if(nombre == '' || apellido == '' || cc == '' || sexo==0 || fechaNaci==''
         || residencia=='' || trabajo == '' || examen == 0 || fechaExam=='' ){
           alert("Debe llenar todos los campos")
+          sw=false;
         }else{
-
+          sw=true;
           var datosPaciente = [];
           datosPaciente.push(nombre);
           datosPaciente.push(apellido);
@@ -98,9 +101,67 @@
 
           socket.emit("datosPaciente",datosPaciente);
         }
+        if(sw=true){
+          cont = cont +1;
+          tableArray.push(nombre);
+          tableArray.push(apellido);
+          tableArray.push(cc);
+          tableArray.push(sexo);
+          tableArray.push(fechaNaci);
+          tableArray.push(residencia);
+          tableArray.push(trabajo);
+          tableArray.push(examen);
+          tableArray.push(fechaExam);
+          $("#cuerpo").html("");
+          for(var i=0; i<tableArray.length; i++){
+            if(tableArray[i+3]==1){
+              sex = "M";
+            }else if(tableArray[i+3]==2){
+              sex = "F";
+            }
+            if(tableArray[i+7]==1){
+              ex = "Positivo";
+            }else if(tableArray[i+7]==2){
+              ex = "Negativo";
+            }
+            var tr = `<tr>
+            <td>`+tableArray[i]+`</td>
+            <td>`+tableArray[i+1]+`</td>
+            <td>`+tableArray[i+2]+`</td>
+            <td>`+sex+`</td>
+            <td>`+tableArray[i+4]+`</td>
+            <td>`+tableArray[i+5]+`</td>
+            <td>`+tableArray[i+6]+`</td>
+            <td>`+ex+`</td>
+            <td>`+tableArray[i+8]+`</td>
+            </tr>`;
+            $("#cuerpo").append(tr)
+            i=i+8;
+          }
+        }
 
       });
     </script>
+    
+    <div id="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th><th>Apellido</th><th>Cedula</th><th>sexo</th><th>fecha de Nacimiento </th>
+            <th>residencia</th><th>trabajo</th><th>examen</th><th>Fecha de Examen</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpo"></tbody>
+      </table>
+    </div>
+
+    <div >
+      <form action="lobbyayudante.html">
+        <input type="submit" class="button-return" value="Regresar al lobby">
+      </form>
+    </div>
+    
+    
 
     <script>
 

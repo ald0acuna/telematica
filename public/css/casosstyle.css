@@ -141,3 +141,53 @@ body {
 	background: red;
 	color: white;
 }
+#table-container{
+	
+	width: 800px;
+	position: absolute;
+	left: 35%;
+	top: 30%;
+}
+table{
+	background-color:white;
+	text-align: left;
+	border-collapse: collapse;
+	font-family: montserrat;
+	font-size: 13px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	width: 100%;
+}
+th, td{
+	border: solid 1px white;
+	padding: 9px;
+}
+thead{
+	background-color: red;
+	border-bottom: solid 3px rgb(75, 87, 87);
+	color: white;
+}
+tr:nth-child(even){
+	background-color: #dddddd;
+}
+tr:hover td{
+	background-color:  rgba(241, 125, 125, 0.87);
+}
+
+.button-return {
+	width: 125px;
+	background: red;
+	font-weight: bold;
+	color: white;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	border: 0 none;
+	border-radius: 1px;
+	cursor: pointer;
+	padding: 10px 5px;
+	margin: 0;
+	position: absolute;
+	left: 58%;
+	top: 18%;
+}
+.button-return:hover, .button-return:focus {
+	box-shadow: 0 0 0 2px darkgray, 0 0 0 3px red;
+}
