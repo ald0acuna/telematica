@@ -179,22 +179,7 @@ body {
 	/*stacking fieldsets above each other*/
 	position: relative;
 }
-#estado-value {
-	background: linear-gradient(rgb(216, 211, 206), rgba(170, 169, 169, 0.733));
-	border: 0 none;
-	border-radius: 3px;
-	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
-	padding: 10px 15px;
-	box-sizing: border-box;
-	width: 18%;
-	margin: 0 10%;
-	left: 217px;
-	top: 254px;
-	
-	
-	/*stacking fieldsets above each other*/
-	position: absolute;
-}
+
 
 #progressbar li {
 	list-style-type: none;
@@ -247,10 +232,13 @@ body {
 	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
 	padding: 4px 8px;
 	box-sizing: border-box;
-	width: 700px;
+	width: 800px;
+	display: block;
+	margin-bottom: 50px;
+	/*
 	position: absolute;
 	left: 45%;
-	top: 35%;
+	top: 35%;*/
 }
 table{
 	background-color:white;
@@ -274,5 +262,35 @@ tr:nth-child(even){
 	background-color: #dddddd;
 }
 tr:hover td{
-	background-color:  rgba(241, 125, 125, 0.87);
+	background-color:  rgba(240, 172, 172, 0.87);
+}
+#estado-value {
+	background: linear-gradient(rgb(216, 211, 206), rgba(170, 169, 169, 0.733));
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 10px 15px;
+	box-sizing: border-box;
+	width: 300px;
+	height: 150px;
+	margin: 0 10%;
+	display: block;
+	left: 157px;
+	position: relative;
+
+	/*
+	
+	top: 254px;
+	position: absolute;*/
+	
+	
+	/*stacking fieldsets above each other*/
+	
+}
+
+#all-container{
+	background: transparent;
+	left: 33%;
+	top: 20%;
+	position: absolute;
 }

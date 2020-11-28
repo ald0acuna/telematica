@@ -54,7 +54,7 @@ io.on('connection', function(socket) {
 
     
 
-    socket.on('datosUsuario', msg => {
+    socket.on('datosUsuario', msg => {//Para registrar usuarios nuevos al sistema 
         nombre = msg[0];
         apellido = msg[1];
         cc = msg[2];
@@ -72,7 +72,7 @@ io.on('connection', function(socket) {
 
     });
 
-    socket.on('datosPaciente', msg=>{
+    socket.on('datosPaciente', msg=>{ //Para insertar los datos del paciente en la base de datos 
         nombre = msg[0];
         apellido = msg[1];
         cc = msg[2];
@@ -92,7 +92,7 @@ io.on('connection', function(socket) {
 
     });
 
-    socket.on('validar', msg=>{
+    socket.on('validar', msg=>{//para vcalidar los usuarios que acceden al login
         username = msg[0];
         password = msg[1];
 
@@ -103,10 +103,41 @@ io.on('connection', function(socket) {
             if (err) throw err;
             /* console.log(result); */
             socket.emit('loginResp', result);
-            console.log("res: "+result);
-            
         });
     });
+
+    socket.on('mododato',msg=>{ //Para buscar los casos de una persona en la seccion de Gestión
+        modo = msg[0];
+        dato = msg[1];
+        if(modo==1){
+            modo= `idCaso`;
+        }else if (modo==2) {
+            modo = `Nombre`;
+        }else{
+            modo = `Cédula`;
+        }
+
+        /* `SELECT c.idCaso, c.Nombre, c.Apellido, s.Sexo, c.FechadeNacimiento, c.DirecciónResidencia,
+        c.DirecciónTrabajo, e.EstadosDelPaciente, c.FechaExamen  
+        FROM Casos c, Estados e, sexo s
+        where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
+        order by FechaExamen DESC;`
+        `SELECT * FROM Covid19.Casos WHERE ${modo} =  '${dato}' order by FechaExamen DESC;`
+        */
+        var bqda = `SELECT c.idCaso, c.Nombre, c.Apellido, c.Cédula, s.Sexo, c.FechadeNacimiento, c.DirecciónResidencia, c.DirecciónTrabajo, e.EstadosDelPaciente, c.FechaExamen  
+        FROM Casos c, Estados e, sexo s
+        where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
+        order by FechaExamen DESC;`;
+        console.log("busqueda de caso: "+bqda);
+        database.query(bqda, function (err, result) {
+            
+            if (err) throw err;
+            /* console.log(result); */
+            socket.emit('bqda', result);
+        });
+    });
+
+
 
 });
 

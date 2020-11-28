@@ -64,34 +64,35 @@
         </fieldset>
     </form>
     
-    <form id="estado-value">
-        
-        <h2 class="fs-title">Seleccionar estado actual</h2>
-        
-        <select id="estado">
-          <option value="0">Estado de paciente</option>
-          <option value="1">En tratamiento en casa</option> 
-          <option value="2">En tratamiento en hospital</option>
-          <option value="3">En UCI</option>
-          <option value="4">Curado</option>
-          <option value="5">Muerte</option>  
-        </select>
-        
-        <input type="submit"  class="submit action-button" value="Actualizar" />
-    </form>
 
-    <div id="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Nombre</th><th>Apellido</th><th>Cedula</th><th>sexo</th><th>fecha de Nacimiento </th>
-              <th>residencia</th><th>trabajo</th><th>examen</th><th>Fecha de Examen</th>
-            </tr>
-          </thead>
-          <tbody id="cuerpo"></tbody>
-        </table>
+    <div id="all-container">
+        <div id="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>idCaso</th> <th>Nombre</th><th>Apellido</th><th>Cedula</th><th>sexo</th><th>fecha de Nacimiento </th>
+                  <th>residencia</th><th>trabajo</th><th>examen</th><th>Fecha de Examen</th>
+                </tr>
+              </thead>
+              <tbody id="cuerpo"></tbody>
+            </table>
+        </div>
+        <form id="estado-value">
+        
+            <h2 class="fs-title">Seleccionar estado actual</h2>
+            
+            <select id="estado">
+              <option value="0">Estado de paciente</option>
+              <option value="1">En tratamiento en casa</option> 
+              <option value="2">En tratamiento en hospital</option>
+              <option value="3">En UCI</option>
+              <option value="4">Curado</option>
+              <option value="5">Muerte</option>  
+            </select>
+            
+            <input type="submit"  class="submit action-button" value="Actualizar" />
+        </form>
     </div>
-    
     
     <!-- Script para el funcionamiento de los fieldset -->
     <script>
@@ -179,14 +180,76 @@
 
     
     <script>
+        
         const form = document.getElementById('msform')
         form.addEventListener('submit', (e) => {
+            tableArray = [];
             e.preventDefault();
             modo = e.target.writter.value;
             dato = e.target.dato.value;
-            console.log("m: "+modo+" dat: "+dato);
+            if(modo=='' || dato==''){
+                alert("Debe llenar todos los campos")
+            }else{
+                mododato= [];
+                mododato.push(modo);
+                mododato.push(dato);
+                socket.emit('mododato',mododato);
+                console.log("mododato: "+mododato);
 
+                socket.on('bqda',info=>{
+                    console.log("bqda"+info);
+                    for (i of info){
+                        tableArray.push(i.idCaso);
+                        tableArray.push(i.Nombre);
+                        tableArray.push(i.Apellido);
+                        tableArray.push(i.Cédula);
+                        tableArray.push(i.Sexo);
+                        var FNaci = new Date(i.FechadeNacimiento).toISOString().split("T")[0];
+                        tableArray.push(FNaci);
+                        tableArray.push(i.DirecciónResidencia);
+                        tableArray.push(i.DirecciónTrabajo);
+                        tableArray.push(i.EstadosDelPaciente);
+                        var FExam = new Date(i.FechaExamen).toISOString().split("T")[0];
+                        tableArray.push(FExam);//10 cariables
+
+                        console.log(tableArray);
+                        
+                    }
+                    function detener(){
+                        e.stopImmediatePropagation();
+                    }    
+                    detener();
+                    
+                    $("#cuerpo").html("");
+                    for(var i=0; i<tableArray.length; i++){
+                        
+                        var tr = `<tr>
+                        <td>`+tableArray[i]+`</td>
+                        <td>`+tableArray[i+1]+`</td>
+                        <td>`+tableArray[i+2]+`</td>
+                        <td>`+tableArray[i+3]+`</td>
+                        <td>`+tableArray[i+4]+`</td>
+                        <td>`+tableArray[i+5]+`</td>
+                        <td>`+tableArray[i+6]+`</td>
+                        <td>`+tableArray[i+7]+`</td>
+                        <td>`+tableArray[i+8]+`</td>
+                        <td>`+tableArray[i+9]+`</td>
+                        </tr>`;
+                        $("#cuerpo").append(tr)
+                        i=i+9;
+                    }
+                });
+                //e.stopImmediatePropagation();
+            }
+
+               
+            
+            
+            //Falta leerlos y ponerlos en la tabla dinamica
+            //Falta poder copiar y alterar rows de la base de datos
         });
+        
+        //form.removeEventListener('submit',listener[true ,useCapture]);
     </script>
 
 </body>
