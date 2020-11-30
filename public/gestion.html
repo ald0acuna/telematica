@@ -183,22 +183,25 @@
         
         const form = document.getElementById('msform')
         form.addEventListener('submit', (e) => {
-            tableArray = [];
+            
             e.preventDefault();
             modo = e.target.writter.value;
             dato = e.target.dato.value;
             if(modo=='' || dato==''){
-                alert("Debe llenar todos los campos")
+                failcampos();
             }else{
                 mododato= [];
                 mododato.push(modo);
                 mododato.push(dato);
                 socket.emit('mododato',mododato);
                 console.log("mododato: "+mododato);
-
                 socket.on('bqda',info=>{
                     console.log("bqda"+info);
-                    for (i of info){
+                    if(info.length==0){
+                        failbqda();
+                    }else{
+                        for (i of info){
+                        tableArray = [];
                         tableArray.push(i.idCaso);
                         tableArray.push(i.Nombre);
                         tableArray.push(i.Apellido);
@@ -206,48 +209,61 @@
                         tableArray.push(i.Sexo);
                         var FNaci = new Date(i.FechadeNacimiento).toISOString().split("T")[0];
                         tableArray.push(FNaci);
-                        tableArray.push(i.DirecciónResidencia);
-                        tableArray.push(i.DirecciónTrabajo);
+                        tableArray.push(i.DireccionResidencia);
+                        tableArray.push(i.DireccionTrabajo);
                         tableArray.push(i.EstadosDelPaciente);
                         var FExam = new Date(i.FechaExamen).toISOString().split("T")[0];
-                        tableArray.push(FExam);//10 cariables
+                        tableArray.push(FExam);//10 variables
 
                         console.log(tableArray);
                         
-                    }
-                    function detener(){
-                        e.stopImmediatePropagation();
-                    }    
-                    detener();
-                    
-                    $("#cuerpo").html("");
-                    for(var i=0; i<tableArray.length; i++){
+                        }
+                        detener();
                         
-                        var tr = `<tr>
-                        <td>`+tableArray[i]+`</td>
-                        <td>`+tableArray[i+1]+`</td>
-                        <td>`+tableArray[i+2]+`</td>
-                        <td>`+tableArray[i+3]+`</td>
-                        <td>`+tableArray[i+4]+`</td>
-                        <td>`+tableArray[i+5]+`</td>
-                        <td>`+tableArray[i+6]+`</td>
-                        <td>`+tableArray[i+7]+`</td>
-                        <td>`+tableArray[i+8]+`</td>
-                        <td>`+tableArray[i+9]+`</td>
-                        </tr>`;
-                        $("#cuerpo").append(tr)
-                        i=i+9;
+                        $("#cuerpo").html("");
+                        for(var i=0; i<tableArray.length; i++){
+                        
+                            var tr = `<tr>
+                            <td>`+tableArray[i]+`</td>
+                            <td>`+tableArray[i+1]+`</td>
+                            <td>`+tableArray[i+2]+`</td>
+                            <td>`+tableArray[i+3]+`</td>
+                            <td>`+tableArray[i+4]+`</td>
+                            <td>`+tableArray[i+5]+`</td>
+                            <td>`+tableArray[i+6]+`</td>
+                            <td>`+tableArray[i+7]+`</td>
+                            <td>`+tableArray[i+8]+`</td>
+                            <td>`+tableArray[i+9]+`</td>
+                            </tr>`;
+                            $("#cuerpo").append(tr)
+                            i=i+9;
+                        }
+                        
+
                     }
+                    
+                    
                 });
-                //e.stopImmediatePropagation();
+                
             }
 
                
-            
+            function detener (){
+            e.stopImmediatePropagation();
+            }
+            function failcampos (){
+                alert("No hay recorridos dentro de las fechas ingresadas")
+                e.stopImmediatePropagation();
+            }
+            function failbqda (){
+                alert("No se ha encontrado datos de este caso")            
+                e.stopImmediatePropagation()
+            }
             
             //Falta leerlos y ponerlos en la tabla dinamica
             //Falta poder copiar y alterar rows de la base de datos
         });
+        
         
         //form.removeEventListener('submit',listener[true ,useCapture]);
     </script>

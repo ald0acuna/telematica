@@ -177,7 +177,7 @@ io.on('connection', function(socket) {
         fExamen = msg[8];
 
         pacientdata = {Nombre:nombre, Apellido:apellido, Cédula:cc, Sexo:sexo, FechadeNacimiento:fNaci, 
-            DirecciónResidencia: resid, DirecciónTrabajo:trabajo, ResultadoExamen: rExamen, FechaExamen:fExamen}
+            DireccionResidencia: resid, DireccionTrabajo:trabajo, ResultadoExamen: rExamen, FechaExamen:fExamen}
         let sql = 'INSERT INTO Casos SET ?';
         let query = database.query(sql,pacientdata,(err,result) =>{
             if(err) throw err;
@@ -217,7 +217,7 @@ io.on('connection', function(socket) {
         order by FechaExamen DESC;`
         `SELECT * FROM Covid19.Casos WHERE ${modo} =  '${dato}' order by FechaExamen DESC;`
         */
-        var bqda = `SELECT c.idCaso, c.Nombre, c.Apellido, c.Cédula, s.Sexo, c.FechadeNacimiento, c.DirecciónResidencia, c.DirecciónTrabajo, e.EstadosDelPaciente, c.FechaExamen  
+        var bqda = `SELECT c.idCaso, c.Nombre, c.Apellido, c.Cédula, s.Sexo, c.FechadeNacimiento, c.DireccionResidencia, c.DireccionTrabajo, e.EstadosDelPaciente, c.FechaExamen  
         FROM Casos c, Estados e, sexo s
         where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
         order by FechaExamen DESC;`;

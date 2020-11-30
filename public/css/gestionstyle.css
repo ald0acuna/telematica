@@ -232,7 +232,7 @@ body {
 	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
 	padding: 4px 8px;
 	box-sizing: border-box;
-	width: 800px;
+	width: 950px;
 	display: block;
 	margin-bottom: 50px;
 	/*
@@ -290,7 +290,7 @@ tr:hover td{
 
 #all-container{
 	background: transparent;
-	left: 33%;
+	left: 27%;
 	top: 20%;
 	position: absolute;
 }

@@ -1,7 +1,8 @@
 body {
     margin: 0px;
     padding: 0px;
-    background: url(../img/background.jpg) no-repeat center top;
+    background: url(../img/fondo.jpeg) no-repeat center top;
+    /*background: linear-gradient(rgba(101, 87, 223, 0.774), rgba(24, 19, 70, 0.774),rgba(101, 87, 223, 0.774));*/
     background-size: cover;    
     font-size: 13px;
     font-family: Arial, Helvetica, sans-serif;
@@ -23,17 +24,18 @@ body {
 }
 .login-box {
     width: 320px;
-    height: 420px;
+    height: 440px;
     border-radius: 5px;
-    background: black;
+    /*background: black;*/
+    background: linear-gradient(rgb(0, 0, 0), rgba(78, 78, 78, 0.836));
     color: blanchedalmond;
-    top: 50%;
+    top: 45%;
     left: 85%;
     border-color: red;
     position: absolute;
     transform: translate(-50%,-50%);
     box-sizing: border-box;
-    box-shadow: 2px 2px 1px 1px red;
+    box-shadow: 2px 2px 1px 1px rgba(255, 0, 0, 0.425);
     padding: 70px 30px;
 }
 
@@ -79,8 +81,7 @@ body {
     font-size: 16px;
 }
 
-.login-box input[type="submit"],
-.login-box input[type="button"] {
+.login-box input[type="submit"]{
     border: none;
     outline: none;
     height: 40px;
@@ -89,15 +90,34 @@ body {
     font-size: 18px;
     border-radius: 10px;
 }
+.login-box input[type="button"] {
+    border: none;
+    outline: none;
+    height: 32px;
+    background: rgb(241, 8, 8);
+    color: white;
+    font-size: 16px;
+    border-radius: 10px;
+}
 
-.login-box input[type="submit"]:hover,
-.login-box input[type="button"]:hover {
+.login-box input[type="submit"]:hover{
     border: none;
     outline: none;
     height: 40px;
     background: rgb(241, 8, 8);
     color: white;
     font-size: 19px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.login-box input[type="button"]:hover {
+    border: none;
+    outline: none;
+    height: 32px;
+    background: rgb(241, 8, 8);
+    color: white;
+    font-size: 16px;
     border-radius: 10px;
     cursor: pointer;
 }
@@ -121,7 +141,8 @@ body {
     height: 40%;
     position: absolute;
     top: 20px;
-    background: white;
+    left: 16px;
+    background: rgba(255, 255, 255, 0.753);
     box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
     border-radius: 10px;
 }
@@ -130,7 +151,8 @@ body {
     height: 40%;
     position: absolute;
     top: 290px;
-    background: white;
+    left: 16px;
+    background: rgba(255, 255, 255, 0.753);
     
     box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
     border-radius: 10px;
@@ -140,8 +162,8 @@ body {
     height: 40%;
     position: absolute;
     top: 20px;
-    left: 500px;
-    background: white;
+    left: 505px;
+    background: rgba(255, 255, 255, 0.753);
     box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
     border-radius: 10px;
 }
@@ -150,8 +172,8 @@ body {
     height: 40%;
     position: absolute;
     top: 290px;
-    left: 500px;
-    background: white;
+    left: 505px;
+    background: rgba(255, 255, 255, 0.753); 
     box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
     border-radius: 10px;
 }
