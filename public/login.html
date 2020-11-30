@@ -10,11 +10,23 @@
     <script src='/socket.io/socket.io.js'></script> 
     <script> var socket = io.connect('http://54.196.238.128:4500/');</script>
   </head>
-  <body>
+  <body onLoad= query(),query1(),query2(),query3()>
+    
 
+    </div>
     <div class="canvas-box">
       <canvas id="myChart"></canvas>
     </div>
+    <div class="canvas-box1">
+      <canvas id="myChart1"></canvas>
+    </div>
+    <div class="canvas-box2">
+      <canvas id="myChart2"></canvas>
+    </div>
+    <div class="canvas-box3">
+      <canvas id="myChart3"></canvas>
+    </div>
+    
     
     <div class="login-box" >
       <img src="img/logoUninorte.png" class="avatar" alt="Logo de uninorte">
@@ -29,6 +41,8 @@
       </form>
 
       <a href=registro.html>¿No estás registrado?</a>
+
+      <input id="submit2" type="button" value="Actualizar Graficas" onclick="query(),query1(),query2(),query3()"/>
     </div>
     
     <script>
@@ -72,41 +86,344 @@
         });
       });
     </script>
-    <script>
-      var ctx= document.getElementById("myChart").getContext("2d");
-      var myChart= new Chart(ctx,{
-        type:'line',
-        data: {
-          labels:[1,20,50,60,70,80],
-          datasets:[
-            {
-              label:'Registrados',
-              //fill: false,
-              data:[9,15,19,24,30,35],
-              backgroundColor: "rgb(66, 134, 244, 0.05)",
-              borderColor: "rgb(55, 112, 100)"
-            },
-            {
-              label:'Muertes',
-              //fill: false,
-              data:[13,20,27,10],
-              backgroundColor: "rgb(66, 134, 244, 0.05)",
-              borderColor: "rgb(66, 134, 244)"
-            }
-          ]
-          
+   <script>
+
+    var f = [];
+    var r = [];
+    var mu = [];
+    var fe = [];
+    var fx = [];
+
+    async function query1() {
+
+      var ctd4 = document.getElementById('submit2').value;
+      const data4 = { cont4: ctd4};
+      const options4 = {
+        method: 'POST',
+        headers: {
+          'Content-Type':'application/json'
         },
-        options:{
-          scales:{
-            yAxes:[{
-              ticks:{
-                beginAtZero:true
-              }
-            }]
+      body: JSON.stringify(data4)
+      };
+      const response3 = await fetch('/datagrafico1', options4);
+      rslt3 = await response3.json();
+      console.log(rslt3);
+
+      const response4 = await fetch('/datagrafico4', options4);
+      rslt4 = await response4.json();
+      console.log(rslt4);
+
+      const response5 = await fetch('/datagrafico5', options4);
+      rslt5 = await response5.json();
+      console.log(rslt5);
+
+
+      for (var i = 0; i < rslt3.length; i++) {
+        rslt3[i].FechaExamen = rslt3[i].FechaExamen.split("T")[0];
+        f[i] = rslt3[i].FechaExamen;  //fecha de examen
+      }
+      
+      for (var i = 0; i < rslt4.length; i++) {
+        rslt4[i].FechaExamen = rslt4[i].FechaExamen.split("T")[0];
+        fx[i] = rslt4[i].FechaExamen;
+        r[i] = rslt4[i].Registros;  //registrados
+      }
+     
+      for (var i = 0; i < rslt5.length; i++) {
+        rslt5[i].FechaDeEstado = rslt5[i].FechaDeEstado.split("T")[0];
+        fe[i] = rslt5[i].FechaDeEstado; //muertos
+        mu[i] = rslt5[i].Muertes; //muertos
+      } 
+      
+      var j = 0;
+      var i = 0;
+      var d = [];
+      
+      while (i < rslt3.length) {
+          
+          var x = fe[j];
+          var y = f[i];
+          
+          if(x == y){
+            d[i] = mu[j];
+            i=i+1;
+            j=j+1;
+                         
+          }else{
+            d[i] = 0; //muertos
+            i=i+1;
+        
           }
+         
         }
-      });
-    </script>
+
+      var j = 0;
+      var i = 0;   
+      var t = [];
+      while (i < rslt3.length) {
+          
+          var x1 = fx[j];
+          var y1 = f[i];
+          
+          if(x1 == y1){
+            t[i] = r[j];
+            i=i+1;
+            j=j+1;
+                         
+          }else{
+            t[i] = 0; //registros
+            i=i+1;
+        
+          }
+         
+        }
+      
+      console.log(f);
+      console.log(t);        
+      console.log(d);
+
+      function registrocasos(ctx) {
+        
+        var myChart= new Chart(ctx,{
+          type:'line',
+          data: {
+            labels:f,
+            datasets:[
+              {
+                label:'Registrados',
+                fontSize: 10,
+                fill: false,
+                data:t,
+                //backgroundColor: "rgb(66, 134, 244, 0.05)",
+                borderColor: "rgb(255, 90, 50)"
+              },
+              {
+                label:'Muertos',
+                fill: false,
+                data:d,
+                //backgroundColor: "rgb(66, 134, 244, 0.05)",
+                borderColor: "rgb(50, 100, 255)"
+              }
+            ]
+            
+          },
+          options:{
+            title: {
+            display: true,
+            text: 'Casos Registrados',
+            fontSize: 15
+            },
+            scales:{
+              yAxes:[{
+                ticks:{
+                  beginAtZero:true,
+                  fontSize: 12
+                }
+              }]
+            }
+            
+          }
+        });
+      }
+      function renCharts4() {
+        
+        const ctx= document.getElementById("myChart").getContext("2d");
+        registrocasos(ctx)
+      }
+
+      renCharts4();
+
+    }    
+    
+  </script>
+  <script>     
+
+    var i = [];
+    var c = [];
+    var m = [];
+
+    async function query2() {
+
+      var ctd2 = document.getElementById('submit2').value;
+      const data2 = { cont2: ctd2};
+      const options2 = {
+        method: 'POST',
+        headers: {
+          'Content-Type':'application/json'
+        },
+      body: JSON.stringify(data2)
+      };
+      const response2 = await fetch('/datagrafico2', options2);
+      rslt1 = await response2.json();
+      console.log(rslt1);
+
+      i = rslt1[0].i;
+      c = rslt1[0].c;
+      m = rslt1[0].m;
+      
+      console.log(i);
+      console.log(c);
+      console.log(m);
+
+      function casostotales(ctx1) {
+        
+        var myChart1 = new Chart(ctx1,{
+          type:'doughnut',
+          data: {
+            labels:['Infectados','Muertos','Curados'],
+            datasets:[{
+                data:[i,m,c],
+                backgroundColor: ['violet','blue','green'],
+            }],
+              
+          },
+          options:{
+            title:{
+              text:"Casos Totales",
+              fontSize: 15,
+              display:true
+
+            }
+          }
+
+        });
+      }
+      function renCharts2() {
+        
+        const ctx1= document.getElementById("myChart1").getContext("2d");
+        casostotales(ctx1)
+      }
+
+      renCharts2();
+    }
+
+  </script>
+  <script>       
+
+    var tc = [];
+    var th = [];
+    var u = [];
+    var mi = [];
+
+    async function query3() {
+
+      var ctd3 = document.getElementById('submit2').value;
+      const data3 = { cont3: ctd3};
+      const options3 = {
+        method: 'POST',
+        headers: {
+          'Content-Type':'application/json'
+        },
+      body: JSON.stringify(data3)
+      };
+      const response3 = await fetch('/datagrafico3', options3);
+      rslt2 = await response3.json();
+      console.log(rslt2);
+
+      tc = rslt2[0].tc;
+      th = rslt2[0].th;
+      u = rslt2[0].u;
+      mi = rslt2[0].m;
+      
+      console.log(tc);
+      console.log(th);
+      console.log(u);
+      console.log(mi);
+
+      function infectados(ctx2) {
+        
+        var myChart2 = new Chart(ctx2,{
+            type:'pie',
+            data: {
+              labels:['En Casa', 'En Hospital','UCI','Muertos'],
+              datasets:[
+                {
+                  data:[tc,th,u,mi],
+                  backgroundColor: ['yellow','orange','violet','blue'],
+
+                },
+              ]               
+            },
+            options:{
+              title:{
+                text:"Tratamiento De Infectados",
+                fontSize: 15,                  
+                display:true
+
+              }
+            }
+          });
+      }
+      function renCharts3() {
+        
+        const ctx2= document.getElementById("myChart2").getContext("2d");
+        infectados(ctx2)
+      }
+
+      renCharts3();
+    }
+
+  </script>
+  <script>
+
+    
+    var p = [];
+    var n = [];
+
+    async function query() {
+
+      var ctd1 = document.getElementById('submit2').value;
+      const data = { cont: ctd1};
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type':'application/json'
+        },
+      body: JSON.stringify(data)
+      };
+      const response = await fetch('/datagrafico',options);
+      rslt = await response.json();
+      console.log(rslt);
+
+      p = rslt[0].p;
+      n = rslt[0].n;
+
+      console.log(p);
+      console.log(n);
+
+      function resultados(ctx3) {
+        
+        const myChart3 = new Chart(ctx3,{
+            type:'pie',
+            data: {
+            labels:['Casos Positivos','Casos Negativos'],
+            datasets:[{
+              data:[p,n],
+              backgroundColor: ['red','black'],
+
+              }],
+            },
+
+            options:{
+              title:{
+                text:"Resultados De Examenes",
+                fontSize: 15,                  
+                display:true
+
+              }
+            }
+        });
+      }
+      function renCharts() {
+        
+        const ctx3= document.getElementById("myChart3").getContext("2d");
+        resultados(ctx3)
+      }
+
+      renCharts();
+    }
+ 
+  </script>
     
   </body>
 </html>

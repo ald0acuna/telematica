@@ -79,24 +79,26 @@ body {
     font-size: 16px;
 }
 
-.login-box input[type="submit"]{
+.login-box input[type="submit"],
+.login-box input[type="button"] {
     border: none;
     outline: none;
     height: 40px;
     background: rgb(241, 8, 8);
     color: white;
     font-size: 18px;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 
-.login-box input[type="submit"]:hover{
+.login-box input[type="submit"]:hover,
+.login-box input[type="button"]:hover {
     border: none;
     outline: none;
     height: 40px;
     background: rgb(241, 8, 8);
     color: white;
     font-size: 19px;
-    border-radius: 20px;
+    border-radius: 10px;
     cursor: pointer;
 }
 
@@ -115,9 +117,40 @@ body {
 }
 
 .canvas-box {
-    width: 32%;
-    height: 35%;
-    left: 5px;
+    width: 35%;
+    height: 40%;
+    position: absolute;
+    top: 20px;
+    background: white;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+}
+.canvas-box1 {
+    width: 35%;
+    height: 40%;
+    position: absolute;
+    top: 290px;
+    background: white;
+    
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+}
+.canvas-box2 {
+    width: 35%;
+    height: 40%;
+    position: absolute;
+    top: 20px;
+    left: 500px;
+    background: white;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+}
+.canvas-box3 {
+    width: 35%;
+    height: 40%;
+    position: absolute;
+    top: 290px;
+    left: 500px;
     background: white;
     box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
     border-radius: 10px;
