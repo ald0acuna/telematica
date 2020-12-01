@@ -22,7 +22,6 @@ const database = mysql.createConnection({
 	
 });
 
-
 httpserver.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/login.html'));
 });
@@ -53,14 +52,14 @@ httpserver.get('/', (req, res) => {
 });
 
 httpserver.post('/datagrafico', (req, res)=>{
-    console.log(req.body);
-    const data = req.body;
+    //console.log(req.body);
 
-    var sql = 'SELECT SUM(ResultadoExamen=1) AS p, SUM(ResultadoExamen=2) AS n FROM Casos'
+
+    var sql = 'SELECT SUM(EstadoDelPaciente=1) AS p, SUM(EstadoDelPaciente=2) AS n FROM ActualizacionEstado'
 
     let query = database.query(sql, (err, result) => {
         if(err) throw err;
-        console.log(result)
+        //console.log(result)
 
         var rslt = result
         res.end(JSON.stringify(rslt));
@@ -76,6 +75,7 @@ httpserver.post('/datagrafico2', (req, res)=>{
 
     let query2 = database.query(sql1, (err, result1) => {
         if(err) throw err;
+        //console.log(result1)
 
         var rslt1 = result1
         res.end(JSON.stringify(rslt1));
@@ -84,11 +84,14 @@ httpserver.post('/datagrafico2', (req, res)=>{
 });
 
 httpserver.post('/datagrafico3', (req, res)=>{
-    
+    //console.log(req.body);
+    const data3 = req.body;
+
     var sql2 = 'SELECT SUM(EstadoDelPaciente=3) AS tc, SUM(EstadoDelPaciente=4) AS th, SUM(EstadoDelPaciente=5) AS u, SUM(EstadoDelPaciente=7) AS m FROM ActualizacionEstado'
 
     let query3 = database.query(sql2, (err, result2) => {
         if(err) throw err;
+        //console.log(result2)
 
         var rslt2 = result2
         res.end(JSON.stringify(rslt2));
@@ -97,11 +100,13 @@ httpserver.post('/datagrafico3', (req, res)=>{
 });
 
 httpserver.post('/datagrafico1', (req, res)=>{
-    
+    //console.log(req.body);
+
     var sql3 = 'SELECT FechaExamen FROM Casos UNION Select FechaDeEstado FROM ActualizacionEstado order by FechaExamen asc'
 
     let query1 = database.query(sql3,(err, result3) => {
         if(err) throw err;
+        //console.log(result3)
 
         var rslt3 = result3
         res.end(JSON.stringify(rslt3));
@@ -117,6 +122,7 @@ httpserver.post('/datagrafico4', (req, res)=>{
 
     let query4 = database.query(sql4, (err, result4) => {
         if(err) throw err;
+        //console.log(result4)
 
         var rslt4 = result4
         res.end(JSON.stringify(rslt4));
@@ -130,22 +136,10 @@ httpserver.post('/datagrafico5', (req, res)=>{
 
     let query5 = database.query(sql5, (err, result5) => {
         if(err) throw err;
+        //console.log(result5)
 
         var rslt5 = result5
         res.end(JSON.stringify(rslt5));
-    })
-});
-
-httpserver.post('/datamapa', (req, res) => {
-
-    var value = 'select EstadoDelPaciente, DireccionResidencia, DireccionTrabajo from Casos c, ActualizacionEstado ae where c.Cédula = ae.Cédula'
-
-    let query7 = database.query(value, (err, result7) => {
-        if (err) throw err;
-
-        res.end(JSON.stringify(result7));
-        console.log(result7)
-
     })
 });
 
@@ -201,6 +195,7 @@ io.on('connection', function(socket) {
         database.query(vd, function (err, result) {
             
             if (err) throw err;
+            /* console.log(result); */
             socket.emit('loginResp', result);
         });
     });
@@ -216,6 +211,13 @@ io.on('connection', function(socket) {
             modo = `Cédula`;
         }
 
+        /* `SELECT c.idCaso, c.Nombre, c.Apellido, s.Sexo, c.FechadeNacimiento, c.DirecciónResidencia,
+        c.DirecciónTrabajo, e.EstadosDelPaciente, c.FechaExamen  
+        FROM Casos c, Estados e, sexo s
+        where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
+        order by FechaExamen DESC;`
+        `SELECT * FROM Covid19.Casos WHERE ${modo} =  '${dato}' order by FechaExamen DESC;`
+        */
         var bqda = `SELECT c.idCaso, c.Nombre, c.Apellido, c.Cédula, s.Sexo, c.FechadeNacimiento, c.DireccionResidencia, c.DireccionTrabajo, e.EstadosDelPaciente, c.FechaExamen  
         FROM Casos c, Estados e, sexo s
         where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
@@ -224,11 +226,42 @@ io.on('connection', function(socket) {
         database.query(bqda, function (err, result) {
             
             if (err) throw err;
+            /* console.log(result); */
             socket.emit('bqda', result);
         });
     });
 
-    
+    socket.on('visudato',msg=>{ //Para buscar los casos de una persona en la seccion de busqueda del medico
+        modo = msg[0];
+        dato = msg[1];
+        if(modo==1){
+            modo= `idCaso`;
+        }else if (modo==2) {
+            modo = `Nombre`;
+        }else{
+            modo = `Cédula`;
+        }
+
+        /* `SELECT c.idCaso, c.Nombre, c.Apellido, s.Sexo, c.FechadeNacimiento, c.DirecciónResidencia,
+        c.DirecciónTrabajo, e.EstadosDelPaciente, c.FechaExamen  
+        FROM Casos c, Estados e, sexo s
+        where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
+        order by FechaExamen DESC;`
+        `SELECT * FROM Covid19.Casos WHERE ${modo} =  '${dato}' order by FechaExamen DESC;`
+        */
+        var bqda = `SELECT distinct c.idCaso, c.Nombre, c.Apellido, c.Cédula, s.Sexo, c.FechadeNacimiento, c.DireccionResidencia, c.DireccionTrabajo, e.EstadosDelPaciente, c.FechaExamen  
+        FROM Casos c, Estados e, sexo s
+        where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
+        order by FechaExamen DESC;`;
+        console.log("busqueda de caso: "+bqda);
+        database.query(bqda, function (err, result) {
+            
+            if (err) throw err;
+            /* console.log(result); */
+            socket.emit('bqda', result);
+        });
+    });
+
     socket.on('visudato',msg=>{ //Para buscar los casos de una persona en la seccion de Gestión
         modo = msg[0];
         dato = msg[1];
@@ -252,13 +285,15 @@ io.on('connection', function(socket) {
         where c.${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados and ae.EstadoDelPaciente=e.idEstados
         order by FechaExamen DESC;`;
         console.log('busqueda: '+bqda);
+
         database.query(bqda, function (err, result) {
-            
+                       
             if (err) throw err;
             /* console.log(result); */
             socket.emit('bqda', result);
         });
     });
+
 
 
 });
