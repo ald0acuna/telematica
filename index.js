@@ -51,13 +51,14 @@ httpserver.get('/', (req, res) => {
 });
 
 httpserver.post('/datagrafico', (req, res)=>{
-    //console.log(req.body);
+    console.log(req.body);
+    const data = req.body;
 
-
-    var sql = 'SELECT SUM(EstadoDelPaciente=1) AS p, SUM(EstadoDelPaciente=2) AS n FROM ActualizacionEstado'
+    var sql = 'SELECT SUM(ResultadoExamen=1) AS p, SUM(ResultadoExamen=2) AS n FROM Casos'
 
     let query = database.query(sql, (err, result) => {
         if(err) throw err;
+        console.log(result)
 
         var rslt = result
         res.end(JSON.stringify(rslt));
