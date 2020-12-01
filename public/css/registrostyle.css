@@ -52,6 +52,15 @@ body {
 	color: #2C3E50;
 	font-size: 13px;
 }
+#msform label{
+    margin: 0;
+    padding: 0;
+    left: 0px;
+    font-family: montserrat;
+    font-size: 12px;
+    text-align: left;
+    display: block;
+}
 /*buttons*/
 #msform .action-button {
 	width: 100px;
