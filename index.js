@@ -180,6 +180,7 @@ io.on('connection', function(socket) {
             if(err) throw err;
         }); 
 
+
     });
 
     socket.on('datosPaciente', msg=>{ //Para insertar los datos del paciente en la base de datos 
@@ -199,6 +200,15 @@ io.on('connection', function(socket) {
         let query = database.query(sql,pacientdata,(err,result) =>{
             if(err) throw err;
         });
+
+        if(rExamen==1){
+            pacientdata = {Nombre:nombre, Apellido:apellido, Cédula:cc, Sexo:sexo, FechadeNacimiento:fNaci, 
+                DireccionResidencia: resid, DireccionTrabajo:trabajo, ResultadoExamen: 3, FechaExamen:fExamen}
+            let sql = 'INSERT INTO ActualizacionEstado SET ?';
+            let query = database.query(sql,pacientdata,(err,result) =>{
+                if(err) throw err;
+            });
+        }
 
     });
 
