@@ -76,8 +76,8 @@
             <table>
               <thead>
                 <tr>
-                  <th>idCaso</th> <th>Nombre</th><th>Apellido</th><th>Cedula</th><th>sexo</th><th>fecha de Nacimiento </th>
-                  <th>residencia</th><th>trabajo</th><th>examen</th><th>Fecha de Examen</th><th>Estado</th>
+                    <th>idCaso</th> <th>Nombre</th><th>Apellido</th><th>Cedula</th><th>sexo</th><th>fecha de Nacimiento </th>
+                    <th>residencia</th><th>trabajo</th><th>Estado</th><th>Fecha de Estado</th>
                 </tr>
               </thead>
               <tbody id="cuerpo"></tbody>
@@ -190,79 +190,47 @@
                 console.log("mododato: "+mododato);
 
                 socket.on('bqda',info=>{
-
-                    //if(info.length==0){
-                      //  alert("El paciente no se encuentra registrado")
-                      //}
                     console.log('bqda'+info);
-                    for (i of info){
-                        tableArray=[];
-                        tableArray.push(i.idCaso);
-                        tableArray.push(i.Nombre);
-                        tableArray.push(i.Apellido);
-                        tableArray.push(i.Cédula);
-                        tableArray.push(i.Sexo);
-                        var FNaci = new Date(i.FechadeNacimiento).toISOString().split("T")[0];
-                        tableArray.push(FNaci);
-                        tableArray.push(i.DireccionResidencia);
-                        tableArray.push(i.DireccionTrabajo);
-                        tableArray.push(i.EstadosDelPaciente);
-                        var FExam = new Date(i.FechaExamen).toISOString().split("T")[0];
-                        tableArray.push(FExam);//10 variables
-                
-                        if (i.EstadoDelPaciente==1) {
-                            i.EstadoDelPaciente="positivo"
-                        } 
-                        else if (i.EstadoDelPaciente==2) {
-                            i.EstadoDelPaciente="negativo"
-                        } 
-                        else if (i.EstadoDelPaciente==3) {
-                            i.EstadoDelPaciente="tratamiento en casa"
-                        }
-                        else if (i.EstadoDelPaciente==4) {
-                            i.EstadoDelPaciente="tratamiento en hospital"
-                        } 
-                        else if (i.EstadoDelPaciente==5) {
-                            i.EstadoDelPaciente="en UCI"
-                        }
-                        else if (i.EstadoDelPaciente==6) {
-                            i.EstadoDelPaciente="recuperado"
-                        }
-                        else if (i.EstadoDelPaciente==7) {
-                            i.EstadoDelPaciente="fallecido"
-                        }
-                        else {
-                        
-                        }
-                        tableArray.push(i.EstadoDelPaciente)
+                    if(info.length==0){
+                        failbqda(e);
+                    }else{
+                        tableArray = [];
+                        for (i of info){
+                            tableArray.push(i.idCaso);
+                            tableArray.push(i.Nombre);
+                            tableArray.push(i.Apellido);
+                            tableArray.push(i.Cédula);
+                            tableArray.push(i.Sexo);
+                            var FNaci = new Date(i.FechadeNacimiento).toISOString().split("T")[0];
+                            tableArray.push(FNaci);
+                            tableArray.push(i.DireccionResidencia);
+                            tableArray.push(i.DireccionTrabajo);
+                            tableArray.push(i.EstadosDelPaciente);
+                            var FEst = new Date(i.FechaDeEstado).toISOString().split("T")[0];
+                            tableArray.push(FEst);//10 variables
 
-                        console.log('vector busqueda: '+tableArray);
+                            console.log(tableArray);
+                        }
+                        detener(e);
+                        $("#cuerpo").html("");
+                        for(var i=0; i<tableArray.length; i++){
+                            var tr = `<tr>
+                            <td>`+tableArray[i]+`</td>
+                            <td>`+tableArray[i+1]+`</td>
+                            <td>`+tableArray[i+2]+`</td>
+                            <td>`+tableArray[i+3]+`</td>
+                            <td>`+tableArray[i+4]+`</td>
+                            <td>`+tableArray[i+5]+`</td>
+                            <td>`+tableArray[i+6]+`</td>
+                            <td>`+tableArray[i+7]+`</td>
+                            <td>`+tableArray[i+8]+`</td>
+                            <td>`+tableArray[i+9]+`</td>
+                            </tr>`;
+                            $("#cuerpo").append(tr)
+                            i=i+9;
+                        }
                         
-                        
-                    }
-                    function detener(){
-                        e.stopImmediatePropagation();
-                    }    
-                    detener();
-                    
-                    $("#cuerpo").html("");
-                    for(var i=0; i<tableArray.length; i++){
-                        
-                        var tr = `<tr>
-                        <td>`+tableArray[i]+`</td>
-                        <td>`+tableArray[i+1]+`</td>
-                        <td>`+tableArray[i+2]+`</td>
-                        <td>`+tableArray[i+3]+`</td>
-                        <td>`+tableArray[i+4]+`</td>
-                        <td>`+tableArray[i+5]+`</td>
-                        <td>`+tableArray[i+6]+`</td>
-                        <td>`+tableArray[i+7]+`</td>
-                        <td>`+tableArray[i+8]+`</td>
-                        <td>`+tableArray[i+9]+`</td>
-                        <td>`+tableArray[i+10]+`</td>
-                        </tr>`;
-                        $("#cuerpo").append(tr)
-                        i=i+10;
+
                     }
                 });
                 //e.stopImmediatePropagation();
@@ -274,13 +242,21 @@
             //Falta leerlos y ponerlos en la tabla dinamica
             //Falta poder copiar y alterar rows de la base de datos
         });
+        function detener (eventForm1){
+            console.log("Llegó a detener");
+            eventForm1.stopImmediatePropagation();
+        }
+        function failcampos (eventForm){
+            console.log("Llegó a fail campos");
+            alert("Debe llenar todos los campos");
+            eventForm.stopImmediatePropagation();
+        }
+        function failbqda (eventForm2){
+            console.log("Llegó a Fail busqueda")
+            alert("No se ha encontrado datos de este caso");            
+            eventForm2.stopImmediatePropagation();
+        }
         
-        //form.removeEventListener('submit');
-        
-
-        
-
-    
     </script>
     <!--<div id="floating-panel">
         <input id="address" type="textbox" value="Calle 20 # 30, Soledad, Atlántico, Colombia" />

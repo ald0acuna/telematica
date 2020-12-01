@@ -255,21 +255,13 @@ io.on('connection', function(socket) {
            
         }
 
-        /* `SELECT c.idCaso, c.Nombre, c.Apellido, s.Sexo, c.FechadeNacimiento, c.DirecciónResidencia,
-        c.DirecciónTrabajo, e.EstadosDelPaciente, c.FechaExamen  
-        FROM Casos c, Estados e, sexo s
-        where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
-        order by FechaExamen DESC;`
-        `SELECT * FROM Covid19.Casos WHERE ${modo} =  '${dato}' order by FechaExamen DESC;`
-        */
-        var bqda = `SELECT c.idCaso, c.Nombre, c.Apellido, c.Cédula, s.Sexo, c.FechadeNacimiento, c.DireccionResidencia, c.DireccionTrabajo, e.EstadosDelPaciente, c.FechaExamen, ae.EstadoDelPaciente 
-        FROM Casos c, Estados e, sexo s, ActualizacionEstado ae
-        where c.${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados and ae.EstadoDelPaciente=e.idEstados
-        order by FechaExamen DESC;`;
-        console.log('busqueda: '+bqda);
-
+        var bqda = `SELECT c.idCaso, c.Nombre, c.Apellido, c.Cédula, s.Sexo, c.FechadeNacimiento, c.DireccionResidencia, c.DireccionTrabajo, e.EstadosDelPaciente, c.FechaDeEstado  
+        FROM ActualizacionEstado c, Estados e, sexo s
+        where c.${modo}='${dato}' and c.Sexo=s.idsexo and c.EstadoDelPaciente= e.idEstados
+        order by FechaDeEstado DESC;`;
+        console.log("busqueda de caso: "+bqda);
         database.query(bqda, function (err, result) {
-                       
+            
             if (err) throw err;
             /* console.log(result); */
             socket.emit('bqda', result);
