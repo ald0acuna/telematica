@@ -277,15 +277,6 @@ tr:hover td{
 	display: block;
 	left: 157px;
 	position: relative;
-
-	/*
-	
-	top: 254px;
-	position: absolute;*/
-	
-	
-	/*stacking fieldsets above each other*/
-	
 }
 
 #all-container{
@@ -295,14 +286,23 @@ tr:hover td{
 	position: absolute;
 }
 
+
 /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
        #map {
         height: 60%;
         width: 60%;
-        position: absolute;
-        top: 50%; 
-        left: 35%;
+		border: 0 none;
+		border-radius: 3px;
+		box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+		padding: 1px 15px;
+		box-sizing: border-box;
+		margin: 0 10%;
+		display: block;
+		top: -50px;
+		left: 310px;
+		position: relative;
+		margin-bottom: 30px;
       }
       
       /* Optional: Makes the sample page fill the window. */
