@@ -211,17 +211,10 @@ io.on('connection', function(socket) {
             modo = `Cédula`;
         }
 
-        /* `SELECT c.idCaso, c.Nombre, c.Apellido, s.Sexo, c.FechadeNacimiento, c.DirecciónResidencia,
-        c.DirecciónTrabajo, e.EstadosDelPaciente, c.FechaExamen  
-        FROM Casos c, Estados e, sexo s
-        where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
-        order by FechaExamen DESC;`
-        `SELECT * FROM Covid19.Casos WHERE ${modo} =  '${dato}' order by FechaExamen DESC;`
-        */
-        var bqda = `SELECT c.idCaso, c.Nombre, c.Apellido, c.Cédula, s.Sexo, c.FechadeNacimiento, c.DireccionResidencia, c.DireccionTrabajo, e.EstadosDelPaciente, c.FechaExamen  
-        FROM Casos c, Estados e, sexo s
-        where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
-        order by FechaExamen DESC;`;
+        var bqda = `SELECT c.idCaso, c.Nombre, c.Apellido, c.Cédula, s.Sexo, c.FechadeNacimiento, c.DireccionResidencia, c.DireccionTrabajo, e.EstadosDelPaciente, c.FechaDeEstado  
+        FROM ActualizacionEstado c, Estados e, sexo s
+        where ${modo}='${dato}' and c.Sexo=s.idsexo and c.EstadoDelPaciente= e.idEstados
+        order by FechaDeEstado DESC;`;
         console.log("busqueda de caso: "+bqda);
         database.query(bqda, function (err, result) {
             
@@ -231,35 +224,21 @@ io.on('connection', function(socket) {
         });
     });
 
-    socket.on('visudato',msg=>{ //Para buscar los casos de una persona en la seccion de busqueda del medico
-        modo = msg[0];
-        dato = msg[1];
-        if(modo==1){
-            modo= `idCaso`;
-        }else if (modo==2) {
-            modo = `Nombre`;
+    socket.on('estado',msg=>{
+        if(msg[4]=='Femenino'){
+            sexo = 2;
         }else{
-            modo = `Cédula`;
+            sexo = 1;
         }
-
-        /* `SELECT c.idCaso, c.Nombre, c.Apellido, s.Sexo, c.FechadeNacimiento, c.DirecciónResidencia,
-        c.DirecciónTrabajo, e.EstadosDelPaciente, c.FechaExamen  
-        FROM Casos c, Estados e, sexo s
-        where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
-        order by FechaExamen DESC;`
-        `SELECT * FROM Covid19.Casos WHERE ${modo} =  '${dato}' order by FechaExamen DESC;`
-        */
-        var bqda = `SELECT distinct c.idCaso, c.Nombre, c.Apellido, c.Cédula, s.Sexo, c.FechadeNacimiento, c.DireccionResidencia, c.DireccionTrabajo, e.EstadosDelPaciente, c.FechaExamen  
-        FROM Casos c, Estados e, sexo s
-        where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
-        order by FechaExamen DESC;`;
-        console.log("busqueda de caso: "+bqda);
-        database.query(bqda, function (err, result) {
-            
-            if (err) throw err;
-            /* console.log(result); */
-            socket.emit('bqda', result);
+        fest = new Date();
+        actdata = {idCaso:msg[0] , Nombre:msg[1], Apellido:msg[2], Cédula:msg[3], Sexo:sexo, FechadeNacimiento:msg[5], 
+            DireccionResidencia: msg[6], DireccionTrabajo:msg[7], EstadoDelPaciente: msg[8], FechaDeEstado: fest}
+        let sql = 'INSERT INTO ActualizacionEstado SET ?';
+        let query = database.query(sql,actdata,(err,result) =>{
+            if(err) throw err;
         });
+
+
     });
 
     socket.on('visudato',msg=>{ //Para buscar los casos de una persona en la seccion de Gestión
