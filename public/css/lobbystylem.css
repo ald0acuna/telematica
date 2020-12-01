@@ -22,10 +22,24 @@ body h2{
     color: white;
 }
 
+.title-box{
+    background: linear-gradient(red, rgb(138, 4, 4));
+	border: 0 none;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	box-sizing: border-box;
+	width: 55%;
+    left: 23%;
+    margin-top: 20px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    padding: 1px;
+}
+
 .button-box{
     margin-top: 50px;
     top: 25%;
-    color: transparent;
+    background:transparent;
 }
 .button-box .button1 {
     margin: 0;
@@ -64,5 +78,26 @@ body h2{
     font-family: montserrat;
 }
 .button-box .button2:hover, .button2:focus {
+	box-shadow: 1px 1px 1px 1px white, 1.5px 1.5px 1.5px 1.5px red;
+}
+
+.button-box .button3 {
+    margin: 0;
+    padding: 0;
+    width: 300px;
+    height: 40px;
+    background: linear-gradient(red, rgb(138, 4, 4));
+    outline-color: red;
+	font-weight: bold;
+	color: white;
+	border: 0 none;
+	border-radius: 20px;
+	cursor: pointer;
+	margin-top: 20px;
+    font-size: 16px;
+    font-family: montserrat;
+    
+}
+.button-box .button3:hover, .button3:focus {
 	box-shadow: 1px 1px 1px 1px white, 1.5px 1.5px 1.5px 1.5px red;
 }

@@ -21,13 +21,28 @@ body h2{
     color: white;
 }
 
+.title-box{
+    background: linear-gradient(white, rgb(119, 116, 116));;
+	border: 0 none;
+	border-radius: 10px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 5px 15px;
+	box-sizing: border-box;
+	width: 60%;
+    left: 20%;
+    margin-top: 20px;
+    position: absolute;
+    color: black;
+}
+
+
 .button-box{
     left: 40%;
     top: 25%;
     position: absolute;
     color: transparent;
 }
-.button-box .button1 {
+.button-box .button1{
     margin: 0;
     padding: 0;
     width: 300px;
@@ -64,5 +79,24 @@ body h2{
     font-family: montserrat;
 }
 .button-box .button2:hover, .button2:focus {
+	box-shadow: 1px 1px 1px 1px white, 1.5px 1.5px 1.5px 1.5px rgb(0, 102, 255);
+}
+.button-box .button3 {
+    margin: 0;
+    padding: 0;
+    width: 300px;
+    height: 40px;
+    background: linear-gradient(white, rgb(119, 116, 116));
+    outline-color: blue;
+	font-weight: bold;
+	color: black;
+	border: 0 none;
+	border-radius: 20px;
+	cursor: pointer;
+	margin-top: 20px;
+    font-size: 16px;
+    font-family: montserrat;   
+}
+.button-box .button3:hover, .button3:focus {
 	box-shadow: 1px 1px 1px 1px white, 1.5px 1.5px 1.5px 1.5px rgb(0, 102, 255);
 }

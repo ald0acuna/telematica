@@ -13,13 +13,27 @@ html {
 }
 
 body {
-    font-family: montserrat, arial, verdana;
+	font-family: montserrat, arial, verdana;
     text-align: center;
     background: url(../img/casos.jpg) no-repeat center top;
     position: relative;
     height: 100%;
-    width: 100%;
-    
+	width: 100%;
+}
+
+#intro{
+    background: linear-gradient(rgb(192, 192, 192), rgba(255, 251, 251, 0.801));
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 10px 15px;
+	box-sizing: border-box;
+	width: 80%;
+    margin: 0 10%;
+    margin-bottom: 30px;
+	
+	/*stacking fieldsets above each other*/
+	position: relative;
 }
 /*form styles*/
 #msform {
