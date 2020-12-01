@@ -52,14 +52,14 @@ httpserver.get('/', (req, res) => {
 });
 
 httpserver.post('/datagrafico', (req, res)=>{
-    //console.log(req.body);
+    console.log(req.body);
+    const data = req.body;
 
-
-    var sql = 'SELECT SUM(EstadoDelPaciente=1) AS p, SUM(EstadoDelPaciente=2) AS n FROM ActualizacionEstado'
+    var sql = 'SELECT SUM(ResultadoExamen=1) AS p, SUM(ResultadoExamen=2) AS n FROM Casos'
 
     let query = database.query(sql, (err, result) => {
         if(err) throw err;
-        //console.log(result)
+        console.log(result)
 
         var rslt = result
         res.end(JSON.stringify(rslt));
@@ -68,14 +68,14 @@ httpserver.post('/datagrafico', (req, res)=>{
 });
 
 httpserver.post('/datagrafico2', (req, res)=>{
-    //console.log(req.body);
+    console.log(req.body);
     const data2 = req.body;
 
-    var sql1 = 'SELECT SUM(EstadoDelPaciente=1) AS i, SUM(EstadoDelPaciente=6) AS c, SUM(EstadoDelPaciente=7) AS m FROM ActualizacionEstado'
+    var sql1 = 'SELECT  SUM(EstadoDelPaciente=6) AS c, SUM(EstadoDelPaciente=7) AS m FROM ActualizacionEstado'
 
     let query2 = database.query(sql1, (err, result1) => {
         if(err) throw err;
-        //console.log(result1)
+        console.log(result1)
 
         var rslt1 = result1
         res.end(JSON.stringify(rslt1));
@@ -83,15 +83,16 @@ httpserver.post('/datagrafico2', (req, res)=>{
 
 });
 
+
 httpserver.post('/datagrafico3', (req, res)=>{
-    //console.log(req.body);
+    console.log(req.body);
     const data3 = req.body;
 
     var sql2 = 'SELECT SUM(EstadoDelPaciente=3) AS tc, SUM(EstadoDelPaciente=4) AS th, SUM(EstadoDelPaciente=5) AS u, SUM(EstadoDelPaciente=7) AS m FROM ActualizacionEstado'
 
     let query3 = database.query(sql2, (err, result2) => {
         if(err) throw err;
-        //console.log(result2)
+        console.log(result2)
 
         var rslt2 = result2
         res.end(JSON.stringify(rslt2));
@@ -100,13 +101,14 @@ httpserver.post('/datagrafico3', (req, res)=>{
 });
 
 httpserver.post('/datagrafico1', (req, res)=>{
-    //console.log(req.body);
+    console.log(req.body);
+    const data4 = req.body;
 
     var sql3 = 'SELECT FechaExamen FROM Casos UNION Select FechaDeEstado FROM ActualizacionEstado order by FechaExamen asc'
 
     let query1 = database.query(sql3,(err, result3) => {
         if(err) throw err;
-        //console.log(result3)
+        console.log(result3)
 
         var rslt3 = result3
         res.end(JSON.stringify(rslt3));
@@ -116,13 +118,14 @@ httpserver.post('/datagrafico1', (req, res)=>{
 
 
 httpserver.post('/datagrafico4', (req, res)=>{
-    //console.log(req.body);
+    console.log(req.body);
+    const data4 = req.body;
 
     var sql4 = 'SELECT FechaExamen, COUNT(idCaso) AS Registros FROM Casos group by FechaExamen'
 
     let query4 = database.query(sql4, (err, result4) => {
         if(err) throw err;
-        //console.log(result4)
+        console.log(result4)
 
         var rslt4 = result4
         res.end(JSON.stringify(rslt4));
@@ -130,19 +133,19 @@ httpserver.post('/datagrafico4', (req, res)=>{
 });
 
 httpserver.post('/datagrafico5', (req, res)=>{
-    //console.log(req.body);
+    console.log(req.body);
+    const data4 = req.body;
 
     var sql5 = 'SELECT FechaDeEstado, SUM(EstadoDelPaciente=7) AS Muertes FROM ActualizacionEstado group by FechaDeEstado'
 
     let query5 = database.query(sql5, (err, result5) => {
         if(err) throw err;
-        //console.log(result5)
+        console.log(result5)
 
         var rslt5 = result5
         res.end(JSON.stringify(rslt5));
     })
 });
-
 
 io.on('connection', function(socket) {
 
