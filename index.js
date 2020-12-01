@@ -147,6 +147,19 @@ httpserver.post('/datagrafico5', (req, res)=>{
     })
 });
 
+httpserver.post('/datamapa', (req, res) => {
+
+    var value = 'select m.EstadoDelPaciente, c.DireccionResidencia, c.DireccionTrabajo from Casos c, Mapa m where c.Cédula = m.Cédula'
+
+    let query7 = database.query(value, (err, result7) => {
+        if (err) throw err;
+
+        res.end(JSON.stringify(result7));
+        console.log(result7)
+
+    })
+});
+
 io.on('connection', function(socket) {
 
     
