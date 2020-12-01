@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Geocoding Service</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAM0aPVFQJaZ3Je0awU_xhwYNpp7Z5H3SE&callback=initMap&libraries=&v=weekly"
+      defer
+    ></script>
+    <link rel="stylesheet" type="text/css" href="mapa.css" />
+    <script src="mapa.js"></script>
+    <script src='../socket.io/socket.io.js'></script> 
+    <script> var socket = io.connect('http://localhost:4500/');</script>
+  </head>
+  <body>
+    <div id="floating-panel">
+      <input id="address" type="textbox" value="Calle 20 # 30, Soledad, Atlántico, Colombia" />
+      <input id="submitmap" type="button" value="Geocode" />
+    </div>
+    <div id="map"></div>
+
+  </body>
+</html>

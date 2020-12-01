@@ -230,6 +230,37 @@ io.on('connection', function(socket) {
         });
     });
 
+    socket.on('visudato',msg=>{ //Para buscar los casos de una persona en la seccion de busqueda del medico
+        modo = msg[0];
+        dato = msg[1];
+        if(modo==1){
+            modo= `idCaso`;
+        }else if (modo==2) {
+            modo = `Nombre`;
+        }else{
+            modo = `Cédula`;
+        }
+
+        /* `SELECT c.idCaso, c.Nombre, c.Apellido, s.Sexo, c.FechadeNacimiento, c.DirecciónResidencia,
+        c.DirecciónTrabajo, e.EstadosDelPaciente, c.FechaExamen  
+        FROM Casos c, Estados e, sexo s
+        where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
+        order by FechaExamen DESC;`
+        `SELECT * FROM Covid19.Casos WHERE ${modo} =  '${dato}' order by FechaExamen DESC;`
+        */
+        var bqda = `SELECT distinct c.idCaso, c.Nombre, c.Apellido, c.Cédula, s.Sexo, c.FechadeNacimiento, c.DireccionResidencia, c.DireccionTrabajo, e.EstadosDelPaciente, c.FechaExamen  
+        FROM Casos c, Estados e, sexo s
+        where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
+        order by FechaExamen DESC;`;
+        console.log("busqueda de caso: "+bqda);
+        database.query(bqda, function (err, result) {
+            
+            if (err) throw err;
+            /* console.log(result); */
+            socket.emit('bqda', result);
+        });
+    });
+
 
 
 });
