@@ -257,7 +257,6 @@
     </script>
     <script>     
 
-      var i = [];
       var c = [];
       var m = [];
 
@@ -276,11 +275,9 @@
         rslt1 = await response2.json();
         console.log(rslt1);
 
-        i = rslt1[0].i;
         c = rslt1[0].c;
         m = rslt1[0].m;
         
-        console.log(i);
         console.log(c);
         console.log(m);
 
@@ -291,7 +288,7 @@
             data: {
               labels:['Infectados','Muertos','Curados'],
               datasets:[{
-                  data:[i,m,c],
+                  data:[p,m,c],
                   backgroundColor: ['violet','blue','green'],
               }],
                 
@@ -400,7 +397,6 @@
 
     </script>
     <script>
-
       
       var p = [];
       var n = [];
