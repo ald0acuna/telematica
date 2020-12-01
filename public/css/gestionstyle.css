@@ -277,14 +277,6 @@ tr:hover td{
 	display: block;
 	left: 157px;
 	position: relative;
-
-	/*
-	
-	top: 254px;
-	position: absolute;*/
-	
-	
-	/*stacking fieldsets above each other*/
 	
 }
 
@@ -293,4 +285,17 @@ tr:hover td{
 	left: 27%;
 	top: 20%;
 	position: absolute;
+}
+#estado-value a{
+    text-decoration: none;
+    font-size: 12px;
+    line-height: 20px;
+    color: red;
+}
+
+#estado-value a:hover{
+    text-decoration: none;
+    font-size: 12px;
+    line-height: 20px;
+    color: white;
 }

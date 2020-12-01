@@ -9,7 +9,6 @@
     <title>Gestionar caso | Proyecto Covid</title>
     <script src='/socket.io/socket.io.js'></script> 
     <script> var socket = io.connect('http://54.196.238.128:4500/');</script>
-
 </head>
 <body>
     <div id="intro">
@@ -19,7 +18,7 @@
     
 
 
-    <form id="msform" >
+    <form id="msform" > 
         <!-- progressbar -->
         <ul id="progressbar">
           <li class="active">Opciones de Busqueda</li>
@@ -29,10 +28,7 @@
         <fieldset>
             <h2 class="fs-title">Actualización de datos</h2>
             <h3 class="fs-subtitle">Elegir opcion de busqueda</h3>
-          
-            
-            
-            <div class="input__row" id="radiobtns">
+            <div class="input__row" id="radiobtns" >
                 <ul class="buttons" >
                 <li>
                     <input id="radiobtn_1" class="radiobtn" name="writter" type="radio" value="1" >
@@ -48,22 +44,21 @@
                     <input id="radiobtn_3" class="radiobtn" name="writter" type="radio" value="3" >
                     <span></span>
                     <label for="radiobtn_3">Cédula</label>
-                </ul> </li>
+                </li>
+                </ul>
             </div>
-            
             <input type="button" id="next" class="next action-button" value="Siguiente" />
-            
         </fieldset>
         <fieldset>
           <h2 class="fs-title">Actualización de datos</h2>
           <h3 class="fs-subtitle">Ingrese el dato del paciente</h3>
-          
           <input type="text" id="dato"  placeholder="Dato del paciente">
-  
           <input type="button"  class="previous action-button" value="Anterior" />
-          <input type="submit" class="submit action-button" value="Buscar" />
+          <input type="submit" id="buscar" class="submit action-button" value="Buscar">
+          <!-- #region <button type="button" id="buscar" class="submit action-button" onclick="mododato()"> Buscar  </button>-->
         </fieldset>
     </form>
+    
     
 
     <div id="all-container">
@@ -72,7 +67,7 @@
               <thead>
                 <tr>
                   <th>idCaso</th> <th>Nombre</th><th>Apellido</th><th>Cedula</th><th>sexo</th><th>fecha de Nacimiento </th>
-                  <th>residencia</th><th>trabajo</th><th>examen</th><th>Fecha de Examen</th>
+                  <th>residencia</th><th>trabajo</th><th>Estado</th><th>Fecha de Estado</th>
                 </tr>
               </thead>
               <tbody id="cuerpo"></tbody>
@@ -92,13 +87,205 @@
             </select>
             
             <input type="submit"  class="submit action-button" value="Actualizar" />
+            <a href=lobbyayudante.html>Regresar al lobby</a>
         </form>
     </div>
-    
-    <!-- Script para el funcionamiento de los fieldset -->
-  
+    <!-- Script para el funcionamiento de los fieldset  
+    <script src="js/gestionfront.js"></script>  -->
 
-    <script src="js/gestionfront.js"></script>
+    <script>
+        var current_fs, next_fs, previous_fs; //fieldsets
+        var left, opacity, scale; //fieldset properties which we will animate
+        var animating; //flag to prevent quick multi-click glitches
+
+
+        $(".next").click(function(){
+            if(animating) return false;
+            animating = true;
+
+            current_fs = $(this).parent();
+            next_fs = $(this).parent().next();
+
+            //activate next step on progressbar using the index of next_fs
+            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+
+            //show the next fieldset
+            next_fs.show(); 
+            //hide the current fieldset with style
+            current_fs.animate({opacity: 0}, {
+                step: function(now, mx) {
+                    //as the opacity of current_fs reduces to 0 - stored in "now"
+                    //1. scale current_fs down to 80%
+                    scale = 1 - (1 - now) * 0.2;
+                    //2. bring next_fs from the right(50%)
+                    left = (now * 50)+"%";
+                    //3. increase opacity of next_fs to 1 as it moves in
+                    opacity = 1 - now;
+                    current_fs.css({
+                'transform': 'scale('+scale+')',
+                'position': 'absolute'
+            });
+                    next_fs.css({'left': left, 'opacity': opacity});
+                }, 
+                duration: 800, 
+                complete: function(){
+                    current_fs.hide();
+                    animating = false;
+                }, 
+                //this comes from the custom easing plugin
+                easing: 'easeInOutBack'
+            });
+            
+        });
+
+        $(".previous").click(function(){
+            if(animating) return false;
+            animating = true;
+
+            current_fs = $(this).parent();
+            previous_fs = $(this).parent().prev();
+
+            //de-activate current step on progressbar
+            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+            //show the previous fieldset
+            previous_fs.show(); 
+            //hide the current fieldset with style
+            current_fs.animate({opacity: 0}, {
+                step: function(now, mx) {
+                    //as the opacity of current_fs reduces to 0 - stored in "now"
+                    //1. scale previous_fs from 80% to 100%
+                    scale = 0.8 + (1 - now) * 0.2;
+                    //2. take current_fs to the right(50%) - from 0%
+                    left = ((1-now) * 50)+"%";
+                    //3. increase opacity of previous_fs to 1 as it moves in
+                    opacity = 1 - now;
+                    current_fs.css({'left': left});
+                    previous_fs.css({'transform': 'scale('+scale+')', 'opacity': opacity});
+                }, 
+                duration: 800, 
+                complete: function(){
+                    current_fs.hide();
+                    animating = false;
+                }, 
+                //this comes from the custom easing plugin
+                easing: 'easeInOutBack'
+            });
+        });
+    </script>
+
+    <script>
+        const form = document.getElementById('msform')
+        form.addEventListener('submit', (e) => {
+            
+            e.preventDefault();
+            modo = e.target.writter.value;
+            dato = e.target.dato.value;
+            if(modo=='' || dato==''){
+                failcampos(e);
+            }else{
+                mododato= [];
+                mododato.push(modo);
+                mododato.push(dato);
+                socket.emit('mododato',mododato);
+                console.log("mododato: "+mododato);
+                socket.on('bqda',info=>{
+                    console.log("bqda"+info);
+                    if(info.length==0){
+                        failbqda(e);
+                    }else{
+                        tableArray = [];
+                        for (i of info){
+                            tableArray.push(i.idCaso);
+                            tableArray.push(i.Nombre);
+                            tableArray.push(i.Apellido);
+                            tableArray.push(i.Cédula);
+                            tableArray.push(i.Sexo);
+                            var FNaci = new Date(i.FechadeNacimiento).toISOString().split("T")[0];
+                            tableArray.push(FNaci);
+                            tableArray.push(i.DireccionResidencia);
+                            tableArray.push(i.DireccionTrabajo);
+                            tableArray.push(i.EstadosDelPaciente);
+                            var FEst = new Date(i.FechaDeEstado).toISOString().split("T")[0];
+                            tableArray.push(FEst);//10 variables
+
+                            console.log(tableArray);
+                        }
+                        detener(e);
+                        $("#cuerpo").html("");
+                        for(var i=0; i<tableArray.length; i++){
+                            var tr = `<tr>
+                            <td>`+tableArray[i]+`</td>
+                            <td>`+tableArray[i+1]+`</td>
+                            <td>`+tableArray[i+2]+`</td>
+                            <td>`+tableArray[i+3]+`</td>
+                            <td>`+tableArray[i+4]+`</td>
+                            <td>`+tableArray[i+5]+`</td>
+                            <td>`+tableArray[i+6]+`</td>
+                            <td>`+tableArray[i+7]+`</td>
+                            <td>`+tableArray[i+8]+`</td>
+                            <td>`+tableArray[i+9]+`</td>
+                            </tr>`;
+                            $("#cuerpo").append(tr)
+                            i=i+9;
+                        }
+                        
+
+                    }
+                    
+                    
+                });
+                
+            }
+        });
+
+        function detener (eventForm1){
+            console.log("Llegó a detener");
+            eventForm1.stopImmediatePropagation();
+        }
+        function failcampos (eventForm){
+            console.log("Llegó a fail campos");
+            alert("Debe llenar todos los campos");
+            eventForm.stopImmediatePropagation();
+        }
+        function failbqda (eventForm2){
+            console.log("Llegó a Fail busqueda")
+            alert("No se ha encontrado datos de este caso");            
+            eventForm2.stopImmediatePropagation();
+        }
+    </script>
+
+    <script>
+        const act = document.getElementById("estado-value");
+
+        act.addEventListener('submit', (e) => {
+            e.preventDefault()
+            estado = e.target.estado.value;
+            if(tableArray[8]=='Muerto'){
+                alert("El estado muerte no puede alterarse")
+            }else if(estado==0){
+                alert("Elija un estado nuevo de paciente")
+            }else{
+                if (estado==1) {
+                    estado=3;
+                }else if (estado==2) {
+                    estado=4;
+                }else if (estado==3) {
+                    estado=5;
+                }else if (estado==4) {
+                    estado=6;
+                }else{
+                    estado=7;
+                }
+                tableArray[8] = estado;
+                socket.emit('estado',tableArray)
+                alert("Se ha actualizado satisfactoriamente")
+            }
+            
+
+        });
+        
+    </script>
 
 </body>
 </html>
