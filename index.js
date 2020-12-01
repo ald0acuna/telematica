@@ -5,6 +5,7 @@ var httpserver = express();
 var server = require('http').Server(httpserver);
 const io = require('socket.io')(server);
 const path = require('path');
+require('dotenv').config();
 
 
 //Settings
@@ -14,10 +15,11 @@ httpserver.use(express.static('public'));
 
 //Conexión a la base de datos
 const database = mysql.createConnection({
-    host: 'database1.ctncp24axruk.us-east-1.rds.amazonaws.com',
-    user: 'admin',
-    password: '2147qwer',
-    database: 'Covid19'
+	host: process.env.HO,
+	user: process.env.A,
+	password: process.env.PA,
+	database: process.env.B
+	
 });
 
 
