@@ -137,46 +137,47 @@ body {
 }
 
 .canvas-box {
-    width: 35%;
+    width: 34%;
     height: 40%;
     position: absolute;
-    top: 20px;
-    left: 16px;
+    top: 40px;
+    left: 26px;
     background: rgba(255, 255, 255, 0.753);
     box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
     border-radius: 10px;
 }
 .canvas-box1 {
-    width: 35%;
+    width: 34%;
     height: 40%;
     position: absolute;
-    top: 290px;
-    left: 16px;
+    top: 310px;
+    left: 26px;
     background: rgba(255, 255, 255, 0.753);
     
     box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
     border-radius: 10px;
 }
 .canvas-box2 {
-    width: 35%;
+    width: 34%;
     height: 40%;
     position: absolute;
-    top: 20px;
-    left: 505px;
+    top: 40px;
+    left: 515px;
     background: rgba(255, 255, 255, 0.753);
     box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
     border-radius: 10px;
 }
 .canvas-box3 {
-    width: 35%;
+    width: 34%;
     height: 40%;
     position: absolute;
-    top: 290px;
-    left: 505px;
+    top: 310px;
+    left: 515px;
     background: rgba(255, 255, 255, 0.753); 
     box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
     border-radius: 10px;
 }
+
 
 
 
