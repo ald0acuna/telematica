@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src='/socket.io/socket.io.js'></script>
-    <script>var socket = io.connect('http://54.196.238.128:4500/');</script>
+    <script>var socket = io.connect('http://localhost:4500/');</script>
 
     <title>Geocoding Service</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
@@ -14,188 +14,253 @@
 </head>
 <body>
     <input id="submit2" type="button" value="Valores" onclick="consulta()" />
+    <style>
+        #submit2 {
+            width: 100px;
+            background: red;
+            font-weight: bold;
+            color: white;
+            border: 0 none;
+            border-radius: 1px;
+            cursor: pointer;
+            padding: 10px 5px;
+            margin: 10px 5px;
+        }
+    </style>
     <input id="marker" type="button" value="Marcadores" onclick="consulta()" />
-    <div id="map"></div>
-    <script>
-        var direcc1 = [];
-        var direcc2 = [];
-        var estsalud = [];
-        async function consulta() {
-            //var con1 = 24;
-            var con1 = document.getElementById('submit2').value;
-            const consulta2 = { con: con1 };
-            const options2 = {
-                method: "POST",
-                body: JSON.stringify(consulta2),
-                headers: {
-                    "Content-Type": "application/json"
+    <style>
+        #marker {
+            width: 100px;
+            background: red;
+            font-weight: bold;
+            color: white;
+            border: 0 none;
+            border-radius: 1px;
+            cursor: pointer;
+            padding: 10px 5px;
+            margin: 10px 5px;
+        }
+    </style>
+    <table class="egt", id="tablita">
+        <tr>
+            <th>Caso</th>
+            <th>Color</th>
+        </tr>
+        <tr>
+            <td>Negativo</td>
+            <td>Verde</td>
+        </tr>
+        <tr>
+            <td>Tratamiento</td>
+            <td>Amarillo</td>
+        </tr>
+        <tr>
+            <td>UCI</td>
+            <td>Naranja</td>
+        </tr>
+        <tr>
+            <td>Curado</td>
+            <td>Rosado</td>
+        </tr>
+        <tr>
+            <td>Muerto</td>
+            <td>Rojo</td>
+        </tr>
+    </table>
+    <style>
+        #tablita,th,td {
+            background-color: white;
+            text-align: left;
+            font-family: montserrat;
+            font-size: 13px;
+            box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+            width: 16%;
+            border: 1px solid black;
+        }
+    </style>
+
+
+        <div id="map"></div>
+        <script>
+            var direcc1 = [];
+            var direcc2 = [];
+            var estsalud = [];
+            async function consulta() {
+                //var con1 = 24;
+                var con1 = document.getElementById('submit2').value;
+                const consulta2 = { con: con1 };
+                const options2 = {
+                    method: "POST",
+                    body: JSON.stringify(consulta2),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                };
+                const response2 = await fetch('/datamapa', options2);
+                result7 = await response2.json();
+                console.log(result7);
+                for (i = 0; i < result7.length; i++) {
+                    direcc1[i] = result7[i].DireccionResidencia;
+                    direcc2[i] = result7[i].DireccionTrabajo;
+                    estsalud[i] = result7[i].EstadoDelPaciente;
+
+
                 }
-            };
-            const response2 = await fetch('/datamapa', options2);
-            result7 = await response2.json();
-            console.log(result7);
-            for (i = 0; i < result7.length; i++) {
-                direcc1[i] = result7[i].DireccionResidencia;
-                direcc2[i] = result7[i].DireccionTrabajo;
-                estsalud[i] = result7[i].EstadoDelPaciente;
+                console.log(direcc1);
+                console.log(direcc2);
+                console.log(estsalud);
+            }
+
+            var pi = 0;
+            var l = 0;
+            var p = 0;
+            function initMap() {
+                const map = new google.maps.Map(document.getElementById("map"), {
+                    zoom: 8,
+                    center: { lat: 11.007338, lng: -74.820814 },
+                });
+                const geocoder = new google.maps.Geocoder();
+                document.getElementById("marker").addEventListener("click", () => {
+
+                    for (var i = 0; i < estsalud.length; i++) {
+                        geocodeAddressA(geocoder, map);
+                        geocodeAddressB(geocoder, map);
+                    }
+                });
+            }
+
+            function geocodeAddressA(geocoder, resultsMap) {
+
+                var statt1 = estsalud[l]
+                geocoder.geocode({ address: direcc1[l] }, (results, status) => {
+                    if (status === "OK") {
+                        resultsMap.setCenter(results[0].geometry.location);
+                        if (statt1 == "2") {
+                            new google.maps.Marker({
+                                icon: {
+                                    url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+
+                                },
+                                map: resultsMap,
+                                position: results[0].geometry.location,
+                            });
+                        } else if (statt1 == "7") {
+                            new google.maps.Marker({
+                                icon: {
+                                    url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+
+                                },
+                                map: resultsMap,
+                                position: results[0].geometry.location,
+                            })
+                        } else if (statt1 == "3" || statt1 == "4" || statt1 == "1") {
+                            new google.maps.Marker({
+                                icon: {
+                                    url: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+
+                                },
+                                map: resultsMap,
+                                position: results[0].geometry.location,
+                            })
+                        } else if (statt1 == "5") {
+                            new google.maps.Marker({
+                                icon: {
+                                    url: 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+
+                                },
+                                map: resultsMap,
+                                position: results[0].geometry.location,
+                            })
+                        } else {
+                            new google.maps.Marker({
+                                icon: {
+                                    url: 'http://maps.google.com/mapfiles/ms/icons/pink-dot.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+
+                                },
+                                map: resultsMap,
+                                position: results[0].geometry.location,
+                            })
+                        }
+                    }
+                    else {
+                        alert("Geocode was not successful for the following reason: " + status);
+                    }
+                });
+                l = l + 1;
+            }
+
+            function geocodeAddressB(geocoder, resultsMap) {
+                console.log(p);
+                var statt2 = estsalud[p]
+                geocoder.geocode({ address: direcc2[p] }, (results, status) => {
+                    if (status === "OK") {
+                        if (statt2 == "2") {
+                            new google.maps.Marker({
+                                icon: {
+                                    url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+
+                                },
+                                map: resultsMap,
+                                position: results[0].geometry.location,
+                            });
+                        } else if (statt2 == "7") {
+                            new google.maps.Marker({
+                                icon: {
+                                    url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+
+                                },
+                                map: resultsMap,
+                                position: results[0].geometry.location,
+                            })
+                        }
+                        else if (statt2 == "3" || statt2 == "4" || statt2 == "1") {
+                            new google.maps.Marker({
+                                icon: {
+                                    url: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+
+                                },
+                                map: resultsMap,
+                                position: results[0].geometry.location,
+                            })
+                        } else if (statt2 == "5") {
+                            new google.maps.Marker({
+                                icon: {
+                                    url: 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+
+                                },
+                                map: resultsMap,
+                                position: results[0].geometry.location,
+                            })
+                        } else {
+                            new google.maps.Marker({
+                                icon: {
+                                    url: 'http://maps.google.com/mapfiles/ms/icons/pink-dot.png',
+                                    scaledSize: new google.maps.Size(50, 50),
+
+                                },
+                                map: resultsMap,
+                                position: results[0].geometry.location,
+                            })
+                        }
+                    }
+                    else {
+                        alert("Geocode was not successful for the following reason: " + status);
+                    }
+                });
+                p = p + 1;
 
 
             }
-            console.log(direcc1);
-            console.log(direcc2);
-            console.log(estsalud);
-        }
 
-        var pi = 0;
-        var l = 0;
-        var p = 0;
-        function initMap() {
-            const map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 8,
-                center: { lat: 11.007338, lng: -74.820814 },
-            });
-            const geocoder = new google.maps.Geocoder();
-            document.getElementById("marker").addEventListener("click", () => {
-               
-                for (var i = 0; i < estsalud.length; i++) {
-                    geocodeAddressA(geocoder, map);
-                    geocodeAddressB(geocoder, map);
-                }
-            });
-        }
-
-        function geocodeAddressA(geocoder, resultsMap) {
-            
-            var statt1 = estsalud[l]
-            geocoder.geocode({ address: direcc1[l] }, (results, status) => {
-                if (status === "OK") {
-                    resultsMap.setCenter(results[0].geometry.location);
-                    if (statt1 == "2") {
-                        new google.maps.Marker({
-                            icon: {
-                                url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
-                                scaledSize: new google.maps.Size(50, 50),
-
-                            },
-                            map: resultsMap,
-                            position: results[0].geometry.location,
-                        });
-                    } else if (statt1 == "7") {
-                        new google.maps.Marker({
-                            icon: {
-                                url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
-                                scaledSize: new google.maps.Size(50, 50),
-
-                            },
-                            map: resultsMap,
-                            position: results[0].geometry.location,
-                        })
-                    } else if (statt1 == "3" || statt1 == "4" || statt1 == "1") {
-                        new google.maps.Marker({
-                            icon: {
-                                url: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
-                                scaledSize: new google.maps.Size(50, 50),
-
-                            },
-                            map: resultsMap,
-                            position: results[0].geometry.location,
-                        })
-                    } else if (statt1 == "5") {
-                        new google.maps.Marker({
-                            icon: {
-                                url: 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
-                                scaledSize: new google.maps.Size(50, 50),
-
-                            },
-                            map: resultsMap,
-                            position: results[0].geometry.location,
-                        })
-                    } else{
-                        new google.maps.Marker({
-                            icon: {
-                                url: 'http://maps.google.com/mapfiles/ms/icons/pink-dot.png',
-                                scaledSize: new google.maps.Size(50, 50),
-
-                            },
-                            map: resultsMap,
-                            position: results[0].geometry.location,
-                        })
-                    }
-                }
-                else {
-                    alert("Geocode was not successful for the following reason: " + status);
-                }
-            });
-            l = l + 1;
-        }    
-
-        function geocodeAddressB(geocoder, resultsMap) {
-            console.log(p);
-            var statt2 = estsalud[p]
-            geocoder.geocode({ address: direcc2[p] }, (results, status) => {
-                if (status === "OK") {
-                    if (statt2 == "2") {
-                        new google.maps.Marker({
-                            icon: {
-                                url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
-                                scaledSize: new google.maps.Size(50, 50),
-
-                            },
-                            map: resultsMap,
-                            position: results[0].geometry.location,
-                        });
-                    } else if (statt2 == "7") {
-                        new google.maps.Marker({
-                            icon: {
-                                url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
-                                scaledSize: new google.maps.Size(50, 50),
-
-                            },
-                            map: resultsMap,
-                            position: results[0].geometry.location,
-                        })
-                    }
-                    else if (statt2 == "3" || statt2 == "4" || statt2 == "1") {
-                        new google.maps.Marker({
-                            icon: {
-                                url: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
-                                scaledSize: new google.maps.Size(50, 50),
-
-                            },
-                            map: resultsMap,
-                            position: results[0].geometry.location,
-                        })
-                    } else if (statt2 == "5") {
-                        new google.maps.Marker({
-                            icon: {
-                                url: 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
-                                scaledSize: new google.maps.Size(50, 50),
-
-                            },
-                            map: resultsMap,
-                            position: results[0].geometry.location,
-                        })
-                    } else{
-                        new google.maps.Marker({
-                            icon: {
-                                url: 'http://maps.google.com/mapfiles/ms/icons/pink-dot.png',
-                                scaledSize: new google.maps.Size(50, 50),
-
-                            },
-                            map: resultsMap,
-                            position: results[0].geometry.location,
-                        })
-                    }
-                }
-                else {
-                    alert("Geocode was not successful for the following reason: " + status);
-                }
-            });
-            p = p + 1;
-            
-            
-        }
-                      
-    </script>
+        </script>
 </body>
 </html >
