@@ -28,9 +28,12 @@
       <fieldset>
         <h2 class="fs-title">Registro de paciente</h2>
         <h3 class="fs-subtitle">paso 1</h3>
+        <label for="nombre">Nombre:</label>
         <input type="text" id="nombre"  placeholder="Nombre">
+        <label for="apellido">Apellido:</label>
         <input type="text" id="apellido"  placeholder="Apellido" >
-        <input type="text" id="cc" placeholder="#Cedula" />
+        <label for="cc">#Cedula:</label>
+        <input type="text" id="cc" placeholder="Ejemplo:123" />
         <input type="button" id="next" class="next action-button" value="Siguiente" />
       </fieldset>
       <fieldset >
@@ -43,7 +46,9 @@
         </select>
         <label for="fechaNaci">Fecha de Nacimiento:</label>
         <input type="date" id="fechaNaci"  placeholder="Fecha de Nacimiento">
-        <input type="text" id="residencia"  placeholder="Direccion de residencia">
+
+        <label for="residencia">Direccion de residencia</label>
+        <input type="text" id="residencia"  placeholder="#Direccion, Barranquilla, Atlántico, Col">
 
         <input type="button"  class="previous action-button" value="Anterior" />
         <input type="button" id="next" class="next action-button" value="Siguiente" />
@@ -51,7 +56,8 @@
       <fieldset >
         <h2 class="fs-title">Registro de paciente</h2>
         <h3 class="fs-subtitle">paso final</h3>
-        <input type="text" id="trabajo"  placeholder="Direccion de trabajo">
+        <label for="trabajo">Direccion de trabajo</label>
+        <input type="text" id="trabajo"  placeholder="#Direccion, Barranquilla, Atlántico, Col">
         <select id="examen">
           <option value="0">Resultado de examen</option>
           <option value="1">Positivo</option> 

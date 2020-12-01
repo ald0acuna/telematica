@@ -203,7 +203,7 @@ io.on('connection', function(socket) {
 
         if(rExamen==1){
             pacientdata = {Nombre:nombre, Apellido:apellido, Cédula:cc, Sexo:sexo, FechadeNacimiento:fNaci, 
-                DireccionResidencia: resid, DireccionTrabajo:trabajo, ResultadoExamen: 3, FechaExamen:fExamen}
+                DireccionResidencia: resid, DireccionTrabajo:trabajo, EstadoDelPaciente: 3, FechaDeEstado:fExamen}
             let sql = 'INSERT INTO ActualizacionEstado SET ?';
             let query = database.query(sql,pacientdata,(err,result) =>{
                 if(err) throw err;
