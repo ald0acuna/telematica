@@ -298,11 +298,11 @@ tr:hover td{
 /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
        #map {
-        height: 80%;
-        width: 80%;
-        /*position: relative;*/
-        top: 14%; 
-        left: 14%;
+        height: 60%;
+        width: 60%;
+        position: absolute;
+        top: 50%; 
+        left: 35%;
       }
       
       /* Optional: Makes the sample page fill the window. */
@@ -316,7 +316,7 @@ tr:hover td{
       
       #floating-panel {
         position: absolute;
-        top: 9%;
+        top: 45%;
         left: 50%;
         z-index: 5;
         background-color: #fff;

@@ -3,11 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/modvisualizacion.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAM0aPVFQJaZ3Je0awU_xhwYNpp7Z5H3SE&callback=initMap&libraries=&v=weekly"
+      defer
+    ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script>
     <title>visualizacion| Proyecto Covid</title>
     <script src='/socket.io/socket.io.js'></script> 
     <script> var socket = io.connect('http://localhost:4500/');</script>
+
 
 </head>
 <body>
@@ -60,8 +66,9 @@
           <input type="text" id="dato"  placeholder="Dato del paciente">
   
           <input type="button"  class="previous action-button" value="Anterior" />
-          <input type="submit" class="submit action-button" value="Buscar"/>
-          <a href="mapa/mapa.html">Observar en el mapa</a>
+          <input id="submitbusq"type="submit" class="submit action-button" value="Buscar"/>
+          <input id="submitmap" type="button" value="Localizar" class="submit action-button"/>
+          
 
         </fieldset>
     </form>
@@ -73,7 +80,7 @@
               <thead>
                 <tr>
                   <th>idCaso</th> <th>Nombre</th><th>Apellido</th><th>Cedula</th><th>sexo</th><th>fecha de Nacimiento </th>
-                  <th>residencia</th><th>trabajo</th><th>examen</th><th>Fecha de Examen</th>
+                  <th>residencia</th><th>trabajo</th><th>examen</th><th>Fecha de Examen</th><th>Estado</th>
                 </tr>
               </thead>
               <tbody id="cuerpo"></tbody>
@@ -185,7 +192,7 @@
                 console.log("mododato: "+mododato);
 
                 socket.on('bqda',info=>{
-                    console.log("bqda"+info);
+                    console.log('bqda'+info);
                     for (i of info){
                         tableArray=[];
                         tableArray.push(i.idCaso);
@@ -199,9 +206,35 @@
                         tableArray.push(i.DireccionTrabajo);
                         tableArray.push(i.EstadosDelPaciente);
                         var FExam = new Date(i.FechaExamen).toISOString().split("T")[0];
-                        tableArray.push(FExam);//10 cariables
+                        tableArray.push(FExam);//10 variables
+                
+                        if (i.EstadoDelPaciente==1) {
+                            i.EstadoDelPaciente="positivo"
+                        } 
+                        else if (i.EstadoDelPaciente==2) {
+                            i.EstadoDelPaciente="negativo"
+                        } 
+                        else if (i.EstadoDelPaciente==3) {
+                            i.EstadoDelPaciente="tratamiento en casa"
+                        }
+                        else if (i.EstadoDelPaciente==4) {
+                            i.EstadoDelPaciente="tratamiento en hospital"
+                        } 
+                        else if (i.EstadoDelPaciente==5) {
+                            i.EstadoDelPaciente="en UCI"
+                        }
+                        else if (i.EstadoDelPaciente==6) {
+                            i.EstadoDelPaciente="recuperado"
+                        }
+                        else if (i.EstadoDelPaciente==7) {
+                            i.EstadoDelPaciente="fallecido"
+                        }
+                        else {
+                        
+                        }
+                        tableArray.push(i.EstadoDelPaciente)
 
-                        console.log(tableArray);
+                        console.log('vector busqueda: '+tableArray);
                         
                     }
                     function detener(){
@@ -223,9 +256,10 @@
                         <td>`+tableArray[i+7]+`</td>
                         <td>`+tableArray[i+8]+`</td>
                         <td>`+tableArray[i+9]+`</td>
+                        <td>`+tableArray[i+10]+`</td>
                         </tr>`;
                         $("#cuerpo").append(tr)
-                        i=i+9;
+                        i=i+10;
                     }
                 });
                 //e.stopImmediatePropagation();
@@ -245,6 +279,58 @@
 
     
     </script>
+    <!--<div id="floating-panel">
+        <input id="address" type="textbox" value="Calle 20 # 30, Soledad, Atlántico, Colombia" />
+        
+      </div>-->
+      <div id="map"></div>
+
+      <script>
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 13,
+            center: { lat: -34.397, lng: 150.644 },
+            });
+            const geocoder = new google.maps.Geocoder();
+            document.getElementById("submitmap").addEventListener("click", () => {
+            geocodeAddress(geocoder, map);
+            });
+            }
+    
+        function geocodeAddress(geocoder, resultsMap) {
+        console.log('direccion residencia: '+tableArray[6])
+        console.log('direccion trabajo: '+tableArray[7])
+
+        //const address = document.getElementById("address").value;
+        const address=tableArray[6];
+        const address1=tableArray[7];
+        geocoder.geocode({ address: address }, (results, status) => {
+            if (status === "OK") {
+            resultsMap.setCenter(results[0].geometry.location);
+            new google.maps.Marker({
+                map: resultsMap,
+                position: results[0].geometry.location,
+                label: "residence",
+            });
+            } else {
+            alert("Geocode was not successful for the following reason: " + status);
+            }
+        });
+
+        geocoder.geocode({ address: address1 }, (results, status) => {
+            if (status === "OK") {
+            resultsMap.setCenter(results[0].geometry.location);
+            new google.maps.Marker({
+                map: resultsMap,
+                position: results[0].geometry.location,
+                label: "work",
+            });
+            } else {
+            alert("Geocode was not successful for the following reason: " + status);
+            }
+        });
+        }
+      </script>
 
 </body>
 </html>
