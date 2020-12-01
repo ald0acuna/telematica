@@ -316,7 +316,7 @@ tr:hover td{
       
       #floating-panel {
         position: absolute;
-        top: 45%;
+        top: 100%;
         left: 50%;
         z-index: 5;
         background-color: #fff;
