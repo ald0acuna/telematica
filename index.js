@@ -58,7 +58,6 @@ httpserver.post('/datagrafico', (req, res)=>{
 
     let query = database.query(sql, (err, result) => {
         if(err) throw err;
-        //console.log(result)
 
         var rslt = result
         res.end(JSON.stringify(rslt));
@@ -74,7 +73,6 @@ httpserver.post('/datagrafico2', (req, res)=>{
 
     let query2 = database.query(sql1, (err, result1) => {
         if(err) throw err;
-        //console.log(result1)
 
         var rslt1 = result1
         res.end(JSON.stringify(rslt1));
@@ -83,14 +81,11 @@ httpserver.post('/datagrafico2', (req, res)=>{
 });
 
 httpserver.post('/datagrafico3', (req, res)=>{
-    //console.log(req.body);
-    const data3 = req.body;
-
+    
     var sql2 = 'SELECT SUM(EstadoDelPaciente=3) AS tc, SUM(EstadoDelPaciente=4) AS th, SUM(EstadoDelPaciente=5) AS u, SUM(EstadoDelPaciente=7) AS m FROM ActualizacionEstado'
 
     let query3 = database.query(sql2, (err, result2) => {
         if(err) throw err;
-        //console.log(result2)
 
         var rslt2 = result2
         res.end(JSON.stringify(rslt2));
@@ -99,13 +94,11 @@ httpserver.post('/datagrafico3', (req, res)=>{
 });
 
 httpserver.post('/datagrafico1', (req, res)=>{
-    //console.log(req.body);
-
+    
     var sql3 = 'SELECT FechaExamen FROM Casos UNION Select FechaDeEstado FROM ActualizacionEstado order by FechaExamen asc'
 
     let query1 = database.query(sql3,(err, result3) => {
         if(err) throw err;
-        //console.log(result3)
 
         var rslt3 = result3
         res.end(JSON.stringify(rslt3));
@@ -121,7 +114,6 @@ httpserver.post('/datagrafico4', (req, res)=>{
 
     let query4 = database.query(sql4, (err, result4) => {
         if(err) throw err;
-        //console.log(result4)
 
         var rslt4 = result4
         res.end(JSON.stringify(rslt4));
@@ -135,7 +127,6 @@ httpserver.post('/datagrafico5', (req, res)=>{
 
     let query5 = database.query(sql5, (err, result5) => {
         if(err) throw err;
-        //console.log(result5)
 
         var rslt5 = result5
         res.end(JSON.stringify(rslt5));
@@ -194,7 +185,6 @@ io.on('connection', function(socket) {
         database.query(vd, function (err, result) {
             
             if (err) throw err;
-            /* console.log(result); */
             socket.emit('loginResp', result);
         });
     });
@@ -210,13 +200,6 @@ io.on('connection', function(socket) {
             modo = `Cédula`;
         }
 
-        /* `SELECT c.idCaso, c.Nombre, c.Apellido, s.Sexo, c.FechadeNacimiento, c.DirecciónResidencia,
-        c.DirecciónTrabajo, e.EstadosDelPaciente, c.FechaExamen  
-        FROM Casos c, Estados e, sexo s
-        where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
-        order by FechaExamen DESC;`
-        `SELECT * FROM Covid19.Casos WHERE ${modo} =  '${dato}' order by FechaExamen DESC;`
-        */
         var bqda = `SELECT c.idCaso, c.Nombre, c.Apellido, c.Cédula, s.Sexo, c.FechadeNacimiento, c.DireccionResidencia, c.DireccionTrabajo, e.EstadosDelPaciente, c.FechaExamen  
         FROM Casos c, Estados e, sexo s
         where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
@@ -225,7 +208,6 @@ io.on('connection', function(socket) {
         database.query(bqda, function (err, result) {
             
             if (err) throw err;
-            /* console.log(result); */
             socket.emit('bqda', result);
         });
     });
@@ -241,13 +223,6 @@ io.on('connection', function(socket) {
             modo = `Cédula`;
         }
 
-        /* `SELECT c.idCaso, c.Nombre, c.Apellido, s.Sexo, c.FechadeNacimiento, c.DirecciónResidencia,
-        c.DirecciónTrabajo, e.EstadosDelPaciente, c.FechaExamen  
-        FROM Casos c, Estados e, sexo s
-        where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
-        order by FechaExamen DESC;`
-        `SELECT * FROM Covid19.Casos WHERE ${modo} =  '${dato}' order by FechaExamen DESC;`
-        */
         var bqda = `SELECT distinct c.idCaso, c.Nombre, c.Apellido, c.Cédula, s.Sexo, c.FechadeNacimiento, c.DireccionResidencia, c.DireccionTrabajo, e.EstadosDelPaciente, c.FechaExamen  
         FROM Casos c, Estados e, sexo s
         where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
@@ -256,7 +231,6 @@ io.on('connection', function(socket) {
         database.query(bqda, function (err, result) {
             
             if (err) throw err;
-            /* console.log(result); */
             socket.emit('bqda', result);
         });
     });
@@ -272,13 +246,6 @@ io.on('connection', function(socket) {
             modo = `Cédula`;
         }
 
-        /* `SELECT c.idCaso, c.Nombre, c.Apellido, s.Sexo, c.FechadeNacimiento, c.DirecciónResidencia,
-        c.DirecciónTrabajo, e.EstadosDelPaciente, c.FechaExamen  
-        FROM Casos c, Estados e, sexo s
-        where ${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados
-        order by FechaExamen DESC;`
-        `SELECT * FROM Covid19.Casos WHERE ${modo} =  '${dato}' order by FechaExamen DESC;`
-        */
         var bqda = `SELECT c.idCaso, c.Nombre, c.Apellido, c.Cédula, s.Sexo, c.FechadeNacimiento, c.DireccionResidencia, c.DireccionTrabajo, e.EstadosDelPaciente, c.FechaExamen, ae.EstadoDelPaciente 
         FROM Casos c, Estados e, sexo s, ActualizacionEstado ae
         where c.${modo}='${dato}' and c.Sexo=s.idsexo and c.ResultadoExamen= e.idEstados and ae.EstadoDelPaciente=e.idEstados
@@ -287,7 +254,6 @@ io.on('connection', function(socket) {
         database.query(bqda, function (err, result) {
             
             if (err) throw err;
-            /* console.log(result); */
             socket.emit('bqda', result);
         });
     });
